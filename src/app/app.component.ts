@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { LoadingComponent } from './shared/components/loading/loading.component';
+import { Toast } from 'primeng/toast';
+import { FooterComponent } from './layout/footer/footer.component';
+import { NavComponent } from './layout/nav/nav.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [NavComponent, FooterComponent, Toast, LoadingComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

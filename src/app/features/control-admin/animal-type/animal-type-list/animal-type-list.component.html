@@ -1,0 +1,54 @@
+<p-card>
+  @if(true) {
+
+  <h2>Lista de Cortes</h2>
+
+  <p-table
+    [tableStyle]="{ 'min-width': '60rem' }"
+    [lazy]="true"
+    (onLazyLoad)="loadData($event)"
+    paginatorDropdownAppendTo="body"
+    [rows]="pageConfig.size"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="{first} a {last} de {totalRecords} cortes."
+    [rowsPerPageOptions]="[5, 10, 25, 50]"
+    [totalRecords]="totalRecords"
+    [value]="animalsType"
+    [paginator]="true"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th id="images">Nome</th>
+        <th id="createdDate">Data Da Criação</th>
+        <th id="lastModifiedDate">Data da ultima modificação</th>
+        <th id="actions">Ações</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-animalType>
+      <tr>
+        <td>{{ animalType.name }}</td>
+        <td>{{ animalType.createdDate }}</td>
+        <td>{{ animalType.lastModifiedDate }}</td>
+        <td>
+          <p-buttongroup>
+            <p-button
+              icon="pi pi-pencil"
+              severity="secondary"
+              size="small"
+              (onClick)="navigationToEdit(animalType.id)"
+            />
+            <p-button
+              icon="pi pi-times"
+              size="small"
+              severity="danger"
+              (onClick)="confirm(animalType.id, animalType.name)"
+            />
+          </p-buttongroup>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  }
+</p-card>
+
+<p-confirmdialog />
