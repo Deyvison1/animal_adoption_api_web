@@ -2,8 +2,8 @@ import { Component, inject, input, output, ViewChild } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { Menu, MenuModule } from 'primeng/menu';
-import { KeycloakService } from '../../core/services/keycloak.service';
-import { environment } from '../../../environments/environment';
+import { KeycloakService } from '../../../core/services/keycloak.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -17,17 +17,25 @@ export class HeaderComponent {
   @ViewChild('profileMenu') profileMenu: Menu;
   logoPath = 'assets/logo.png';
   env = environment;
-
+  notificationsCount = 3;
   showSideBar = output<boolean>();
   sidebarVisible = input<boolean>();
   toggleProfileMenu(event: Event) {
     this.profileMenu.toggle(event);
   }
 
+  openNotifications() {
+    console.log('Abrir painel de notificações!');
+  }
+
   profileItems: MenuItem[] = [
-    { label: 'Minha Conta', icon: 'pi pi-user', command: () => {
-      globalThis.location.href = this.env.keycloakConfig.urlAccount;
-    } },
+    {
+      label: 'Minha Conta',
+      icon: 'pi pi-user',
+      command: () => {
+        globalThis.location.href = this.env.keycloakConfig.urlAccount;
+      },
+    },
     { separator: true },
     {
       label: 'Sair',

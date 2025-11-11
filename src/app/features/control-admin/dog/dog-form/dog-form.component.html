@@ -1,0 +1,166 @@
+<p-card>
+  <h2>{{ title }}</h2>
+
+  <form [formGroup]="form">
+    <div class="formgrid grid">
+      <!-- Nome -->
+      <div class="field col-12 md:col-6 lg:col-4">
+        <p-floatlabel variant="on">
+          <input
+            pInputText
+            id="nome"
+            autocomplete="off"
+            formControlName="name"
+            [ngClass]="{
+              'ng-invalid ng-dirty':
+                form.get('name')?.invalid && form.get('name')?.touched
+            }"
+            fluid
+            maxlength="50"
+          />
+          <label for="nome">Nome do animal</label>
+        </p-floatlabel>
+        <app-erro [control]="form.get('name')"></app-erro>
+      </div>
+
+      <!-- Idade -->
+      <div class="field col-12 md:col-3 lg:col-2">
+        <p-floatlabel variant="on">
+          <p-inputnumber
+            formControlName="age"
+            inputId="age"
+            class="w-full"
+            fluid
+          />
+          <label for="age">Idade</label>
+        </p-floatlabel>
+        <app-erro [control]="form.get('age')"></app-erro>
+      </div>
+
+      <!-- Raça -->
+      <div class="field col-12 md:col-6 lg:col-4">
+        <p-floatlabel variant="on">
+          <p-select
+            formControlName="breedId"
+            inputId="on_label"
+            [options]="breeds"
+            optionValue="id"
+            optionLabel="name"
+            class="w-full"
+            emptyMessage="Nenhuma raça encontrada"
+          />
+          <label for="on_label">Raça</label>
+        </p-floatlabel>
+        <app-erro [control]="form.get('breedId')"></app-erro>
+      </div>
+
+      <!-- Disponível -->
+      <div class="field col-12 md:col-3 lg:col-2 flex align-items-center">
+        <p-checkbox
+          formControlName="available"
+          binary="true"
+          inputId="ny"
+        ></p-checkbox>
+        <label for="ny" class="ml-2">Disponível?</label>
+        <app-erro [control]="form.get('available')"></app-erro>
+      </div>
+    </div>
+
+    <div class="formgrid grid">
+      @if(id) {
+      <div class="field col-12 md:col-3 lg:col-4">
+        <p-fileupload
+          chooseLabel="Escolher arquivo"
+          uploadLabel="Upload do corte."
+          cancelLabel="Cancelar"
+          pSize="small"
+          mode="basic"
+          chooseIcon="pi pi-upload"
+          accept="image/*"
+          maxFileSize="1000000"
+          chooseLabel="Browse"
+          (onSelect)="onFileSelected($event)"
+        />
+      </div>
+      }
+      <div div class="field col-12 md:col-3 lg:col-4">
+        <p-floatlabel variant="on">
+          <textarea
+            pSize="small"
+            rows="3"
+            pTextarea
+            id="over_label"
+            cols="30"
+            formControlName="description"
+            style="resize: none"
+            class="h-full"
+            [ngClass]="{
+              'ng-invalid ng-dirty': form.controls['description'].invalid
+            }"
+            maxlength="255"
+            minlength="10"
+            fluid
+          ></textarea>
+          <label for="description">Descrição</label>
+        </p-floatlabel>
+        <app-erro [control]="form.get('description')"></app-erro>
+      </div>
+    </div>
+
+    <div class="formgrid grid">
+      <app-contact [form]="contactsFormArray"></app-contact>
+    </div>
+
+    <!-- Botão -->
+    <div class="flex justify-content-end mt-4">
+      <p-button label="Salvar" (onClick)="save()"></p-button>
+    </div>
+
+    <p-galleria
+      [value]="imagesArray"
+      [showThumbnails]="false"
+      [showIndicators]="true"
+      [showItemNavigatorsOnHover]="true"
+      [(activeIndex)]="activeIndex"
+      [circular]="true"
+      [responsiveOptions]="responsiveOptions"
+      [containerStyle]="{ 'max-width': '640px' }"
+      [responsiveOptions]="responsiveOptions"
+    >
+      <ng-template #item let-item let-i="index">
+        <div
+          class="galery"
+          [ngStyle]="{
+            border: item?.active ? '3px solid #2196f3' : '1px solid #ccc',
+            boxShadow: item?.active ? '0 0 8px rgba(33,150,243,0.5)' : 'none'
+          }"
+        >
+          <img
+            [src]="item?.itemImageSrc"
+            alt="{{ item?.filename }}"
+            class="img"
+          />
+
+          <div class="icon-active" (click)="setActiveImage(item)">
+            <i
+              class="pi"
+              [ngClass]="item?.active ? 'pi-check-circle' : 'pi-circle'"
+              style="font-size: 1.2rem; color: #2196f3"
+            ></i>
+          </div>
+
+          <!-- Botão de remover -->
+          <div class="btn-remove">
+            <p-button
+              icon="pi pi-times"
+              severity="danger"
+              [rounded]="true"
+              (onClick)="removeImage(item)"
+              [disabled]="item?.active"
+            ></p-button>
+          </div>
+        </div>
+      </ng-template>
+    </p-galleria>
+  </form>
+</p-card>

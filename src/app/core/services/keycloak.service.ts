@@ -7,6 +7,7 @@ import { KeycloakDecodedToken } from '../../shared/model/keycloak-decoded-token.
 export class KeycloakService {
   private keycloak?: Keycloak;
 
+  // Inicializa Keycloak
   init(): Promise<void> {
     this.keycloak = new Keycloak({
       url: environment.keycloakConfig.url,
@@ -16,13 +17,10 @@ export class KeycloakService {
 
     return this.keycloak
       .init({
-        onLoad: 'login-required',
+        onLoad: 'check-sso', // permite rotas públicas
         checkLoginIframe: false,
       })
       .then((authenticated) => {
-        if (!authenticated) {
-          this.keycloak?.login();
-        }
       });
   }
 
@@ -44,16 +42,11 @@ export class KeycloakService {
       throw new Error('Keycloak não inicializado');
     }
 
-    // Atualiza token se faltar menos de 30 segundos
     return new Promise<string>((resolve, reject) => {
       this.keycloak
         .updateToken(30)
-        .then((refreshed) => {
-          resolve(this.keycloak.token!);
-        })
-        .catch(() => {
-          reject(new Error('Falha ao atualizar token'));
-        });
+        .then(() => resolve(this.keycloak!.token!))
+        .catch(() => reject(new Error('Falha ao atualizar token')));
     });
   }
 
@@ -66,6 +59,17 @@ export class KeycloakService {
       ? this.getClientRoles(clientId)
       : this.getRealmRoles();
     return roles.some((role) => userRoles.includes(role));
+  }
+
+  // 🔹 Novo método de login
+  login(redirectUri?: string): void {
+    if (!this.keycloak) throw new Error('Keycloak não inicializado');
+
+    const options: Keycloak.KeycloakLoginOptions = {
+      redirectUri: redirectUri || window.location.origin + '/admin',
+    };
+
+    this.keycloak.login(options);
   }
 
   logout(): void {

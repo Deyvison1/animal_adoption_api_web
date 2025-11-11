@@ -1,8 +1,4 @@
-import {
-  HttpErrorResponse,
-  HttpHeaders,
-  HttpInterceptorFn,
-} from '@angular/common/http';
+import { HttpHeaders, HttpInterceptorFn } from '@angular/common/http';
 import { KeycloakService } from '../services/keycloak.service';
 import { from, switchMap, tap } from 'rxjs';
 import { inject } from '@angular/core';
@@ -12,6 +8,11 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const keycloakService = inject(KeycloakService);
 
+  // Ignora chamadas públicas (ex: backend /public/**)
+  if (req.url.includes('/public/')) {
+    return next(req);
+  }
+
   return from(keycloakService.getToken()).pipe(
     switchMap((token) => {
       let headers = req.headers || new HttpHeaders();
@@ -19,19 +20,11 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
         headers = headers.set('Authorization', `Bearer ${token}`);
       }
 
-      const cloneReq = req.clone({ headers });
-
-      return next(cloneReq).pipe(
+      return next(req.clone({ headers })).pipe(
         tap({
-          error: (err: HttpErrorResponse) => {
-            switch (err.status) {
-              case 401:
-                keycloakService.logout();
-                break;
-              case 403:
-                router.navigateByUrl('/forbidden');
-                break;
-            }
+          error: (err) => {
+            if (err.status === 401) keycloakService.logout();
+            if (err.status === 403) router.navigateByUrl('/admin/forbidden');
           },
         })
       );

@@ -1,0 +1,59 @@
+<div class="dog-list-wrapper" (scroll)="onScroll($event)">
+  <div class="dog-list">
+    @for (dog of dogs; track dog.id) {
+
+    <p-card class="dog-card">
+      <div class="dog-card-content">
+        <!-- IMAGENS -->
+        <div class="dog-image-wrapper">
+          <p-carousel
+            [value]="dog.images"
+            [numVisible]="1"
+            [numScroll]="1"
+            [circular]="false"
+            [showIndicators]="true"
+            [showNavigators]="dog.images?.length > 1"
+            styleClass="dog-carousel"
+          >
+            <ng-template pTemplate="item" let-img>
+              <img
+                [src]="getUriImages(img)"
+                [alt]="dog.name"
+                class="carousel-img"
+              />
+            </ng-template>
+          </p-carousel>
+        </div>
+
+        <!-- INFO -->
+        <div class="dog-info">
+          <h3>{{ dog.name }} - {{ dog.breed.name }}</h3>
+          <p>{{ dog.description }}</p>
+
+          @if(dog.age) {
+          <p><strong>Idade:</strong> {{ dog.age }} anos</p>
+          } @if(dog.breed.nationality) {
+          <p><strong>Nacionalidade:</strong> {{ dog.breed.nationality }}</p>
+          }
+        </div>
+      </div>
+
+      <ng-template pTemplate="footer">
+        <div class="p-3 d-flex justify-content-end">
+          <button
+            pButton
+            type="button"
+            label="Ver contatos"
+            icon="pi pi-users"
+            (click)="contactPreview.open(dog.contacts)"
+          ></button>
+        </div>
+      </ng-template>
+    </p-card>
+    <app-contact-view
+      #contactPreview
+      [contacts]="dog.contacts"
+    ></app-contact-view>
+    }
+  </div>
+</div>

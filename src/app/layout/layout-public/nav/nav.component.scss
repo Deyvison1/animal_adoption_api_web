@@ -1,0 +1,7 @@
+:host ::ng-deep .my-menubar.p-menubar {
+  --p-menubar-background: #cfd5f7;
+  --p-menubar-color: #fff;
+
+  background: var(--p-menubar-background) !important;
+  color: var(--p-menubar-color) !important;
+}

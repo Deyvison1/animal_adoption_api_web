@@ -1,0 +1,55 @@
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 4rem 2rem;
+  flex-wrap: wrap; /* permite quebrar no mobile */
+
+  .hero-text {
+    flex: 1 1 350px;
+    max-width: 500px;
+  }
+
+  img {
+    flex: 1 1 300px;
+    max-width: 450px;
+    width: 100%;
+    border-radius: 16px;
+    object-fit: cover;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  }
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .hero {
+    text-align: center;
+    flex-direction: column;
+    padding: 2rem 1rem;
+
+    img {
+      max-width: 320px;
+    }
+  }
+}
+
+.section {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  margin-top: 2rem;
+  opacity: 0.7;
+  font-size: 0.9rem;
+}

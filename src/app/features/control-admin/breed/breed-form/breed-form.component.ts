@@ -126,7 +126,7 @@ export class BreedFormComponent implements OnInit {
 
   private checkIfUpdate(): void {
     this.id = this.route.snapshot.paramMap.get('id') ?? '';
-    this.title = this.id ? 'Atualizar tipo' : 'Cadastrar tipo';
+    this.title = this.id ? 'Atualizar raça' : 'Cadastrar raça';
 
     if (this.id) {
       this.findById(this.id);

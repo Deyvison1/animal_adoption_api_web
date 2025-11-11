@@ -1,0 +1,29 @@
+.contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contact-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .8rem;
+  border-radius: 8px;
+  background: #f6f6f6;
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+  font-weight: 600;
+  margin: 0;
+}
+
+.value {
+  margin: 0;
+  color: #666;
+}

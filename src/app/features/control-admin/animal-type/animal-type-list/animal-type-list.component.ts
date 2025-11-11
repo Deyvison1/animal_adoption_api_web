@@ -69,7 +69,7 @@ export class AnimalTypeListComponent {
     const nameBold = `<strong>${name}</strong>`;
     this.confirmationService.confirm({
       message: `A exclusão do ${nameBold} não poderá ser desfeita.`,
-      header: 'Tem certeza que deseja excluir esse barbeiro?',
+      header: 'Tem certeza que deseja excluir esse tipo?',
       icon: 'pi pi-info-circle',
       rejectLabel: 'Cancelar',
       rejectButtonProps: {
@@ -106,6 +106,6 @@ export class AnimalTypeListComponent {
   }
 
   navigationToEdit(id: string) {
-    this.router.navigate(['animal-type', 'form', id]);
+    this.router.navigate(['admin/animal-type', 'form', id]);
   }
 }

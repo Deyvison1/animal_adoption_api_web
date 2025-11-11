@@ -1,0 +1,31 @@
+<p-dialog
+  [(visible)]="visible"
+  modal="true"
+  header="Informações de Contato"
+  [style]="{ width: '450px' }"
+>
+  @for (c of contacts(); track $index) {
+  <div class="contact-block">
+    <div class="info">
+      <p class="name">{{ c.name }}</p>
+      <p class="value">{{ c.value }}</p>
+    </div>
+
+    @if (!c.value.includes('@')) {
+    <qrcode
+      [qrdata]="getWhatsappLink(c.value)"
+      [width]="120"
+      [margin]="1"
+    ></qrcode>
+
+    } @else {
+    <!-- Email ou outro → sem QR -->
+    <p-button icon="pi pi-copy" (onClick)="copyText(c.value)"></p-button>
+    }
+  </div>
+  }
+
+  <p-footer>
+    <button pButton label="Fechar" (click)="close()"></button>
+  </p-footer>
+</p-dialog>

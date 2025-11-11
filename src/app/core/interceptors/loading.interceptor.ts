@@ -13,6 +13,5 @@ export const LoadingInterceptor: HttpInterceptorFn = (
 ) => {
   const loadingService = inject(LoadingService);
   loadingService.show();
-
   return next(req).pipe(finalize(() => loadingService.hide()));
 };

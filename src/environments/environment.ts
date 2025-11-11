@@ -1,6 +1,7 @@
 export const environment = {
   production: true,
   apiUrl: 'http://localhost:8081/api',
+  apiUrlPublic: 'http://localhost:8081/public',
   keycloakConfig: {
     url: 'https://keycloak.barbershop-app.shop:8443',
     realm: 'ANIMAL_ADOPTION',

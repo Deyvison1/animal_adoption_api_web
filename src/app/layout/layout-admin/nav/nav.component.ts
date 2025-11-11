@@ -2,16 +2,14 @@ import { Menu } from 'primeng/menu';
 import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { PanelMenuModule } from 'primeng/panelmenu';
 
-import { MenuItem } from 'primeng/api';
 import { HeaderComponent } from '../header/header.component';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { DrawerModule } from 'primeng/drawer';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs';
-import { KeycloakService } from '../../core/services/keycloak.service';
-import { environment } from '../../../environments/environment';
-import { MenuDTO } from '../../shared/model/menu.dto';
-import { MenuService } from '../../core/services/menu.service';
+import { MenuService } from '../../../core/services/menu.service';
+import { KeycloakService } from '../../../core/services/keycloak.service';
+import { MenuDTO } from '../../../shared/model/menu.dto';
 
 @Component({
   selector: 'app-nav',

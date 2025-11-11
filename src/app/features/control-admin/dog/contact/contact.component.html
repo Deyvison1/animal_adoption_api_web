@@ -1,0 +1,58 @@
+@for (item of contacts.controls; track $index) {
+<div class="formgrid grid align-items-start gap-3 w-full">
+  <!-- FORM FICA EM COLUNA -->
+  <form [formGroup]="item" class="col-10 flex flex-column gap-3 mt-4">
+    <h3>Dados do Responsavel</h3>
+
+    <div class="field">
+      <p-floatlabel variant="on">
+        <input
+          pInputText
+          id="name"
+          autocomplete="off"
+          formControlName="name"
+          maxlength="50"
+          fluid
+        />
+        <label for="name">Nome do responsavel</label>
+      </p-floatlabel>
+      <app-erro [control]="item.get('name')"></app-erro>
+    </div>
+    <div class="field">
+      <p-floatlabel variant="on">
+        <input
+          pInputText
+          id="value"
+          autocomplete="off"
+          formControlName="value"
+          maxlength="50"
+          fluid
+          (input)="onValueInput($event, item)"
+        />
+        <label for="value">Telefone / E-mail</label>
+      </p-floatlabel>
+      <app-erro [control]="item.get('value')"></app-erro>
+    </div>
+  </form>
+
+  <!-- COLUNA DOS BOTÕES -->
+  <div class="col-2 flex flex-column gap-2 justify-content-start items-end">
+    <p-button
+      label="Adicionar"
+      icon="pi pi-plus"
+      [rounded]="true"
+      severity="success"
+      (click)="addContact()"
+    />
+    @if(contacts.length > 1) {
+    <p-button
+      label="Remover"
+      icon="pi pi-trash"
+      [rounded]="true"
+      severity="danger"
+      (click)="removeContact($index)"
+    />
+    }
+  </div>
+</div>
+}

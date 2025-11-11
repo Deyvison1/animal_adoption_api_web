@@ -1,4 +1,4 @@
-import { BaseImageDTO } from '../models/base/base-image.dto';
+import { BaseImageDTO } from '../model/base/base-image.dto';
 
 interface MinimalImageDTO {
   id: string;
