@@ -16,6 +16,7 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
 import { CardModule } from 'primeng/card';
 import { ButtonGroupModule } from 'primeng/buttongroup';
 import { BreedService } from '../../../../core/services/breed.service';
+import { AuthRoleDirective } from '../../../../shared/directives/auth-role.directive';
 
 @Component({
   selector: 'app-breed-list',
@@ -29,6 +30,7 @@ import { BreedService } from '../../../../core/services/breed.service';
     ConfirmDialog,
     CardModule,
     ButtonGroupModule,
+    AuthRoleDirective
   ],
   templateUrl: './breed-list.component.html',
   styleUrl: './breed-list.component.scss',
@@ -39,6 +41,7 @@ export class BreedListComponent {
   private readonly toastrService = inject(ToastrService);
   private readonly router = inject(Router);
   private readonly breedService: BreedService = inject(BreedService);
+  readonly rolesAdmin: string[] = ['ADMIN'];
 
   pageConfig = pageConfig;
   operationMessages = operationMessages;

@@ -32,12 +32,14 @@
         <td>
           <p-buttongroup>
             <p-button
+              [appAuthRole]="rolesAdmin"
               icon="pi pi-pencil"
               severity="secondary"
               size="small"
               (onClick)="navigationToEdit(animalType.id)"
             />
             <p-button
+              [appAuthRole]="rolesAdmin"
               icon="pi pi-times"
               size="small"
               severity="danger"

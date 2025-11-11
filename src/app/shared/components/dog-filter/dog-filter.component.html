@@ -1,0 +1,45 @@
+<form [formGroup]="form">
+  <div class="grid">
+    <div class="field col-3 md:col-3 lg:col-3">
+      <p-floatlabel>
+        <input
+          pInputText
+          id="name"
+          autocomplete="off"
+          formControlName="name"
+          fluid
+          maxlength="50"
+        />
+        <label for="name">Nome do cachorro</label>
+      </p-floatlabel>
+    </div>
+    <div class="field col-3 md:col-3 lg:col-3">
+      <p-floatlabel>
+        <input
+          pInputText
+          id="breed"
+          autocomplete="off"
+          formControlName="breed"
+          fluid
+          maxlength="50"
+        />
+        <label for="breed">Nome da raça</label>
+      </p-floatlabel>
+    </div>
+  </div>
+  <div class="p-mt-3">
+    <p-button
+      label="Filtrar"
+      icon="pi pi-filter"
+      class="p-mr-2"
+      (onClick)="search()"
+    ></p-button>
+    <p-button
+      label="Limpar"
+      severity="warn"
+      icon="pi pi-times"
+      class="p-button-secondary"
+      (onClick)="clear()"
+    ></p-button>
+  </div>
+</form>

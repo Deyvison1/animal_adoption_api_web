@@ -17,6 +17,9 @@ import { getPagePrimeng } from '../../../../shared/utils/page-primeng.utils';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ImageModule } from 'primeng/image';
 import { TooltipModule } from 'primeng/tooltip';
+import { AuthRoleDirective } from '../../../../shared/directives/auth-role.directive';
+import { DogFilterComponent } from '../../../../shared/components/dog-filter/dog-filter.component';
+import { DogFilterDTO } from '../../../../shared/model/dog-filter.dto';
 
 @Component({
   selector: 'app-dog-list',
@@ -30,7 +33,9 @@ import { TooltipModule } from 'primeng/tooltip';
     CardModule,
     ButtonGroupModule,
     ImageModule,
-    TooltipModule
+    TooltipModule,
+    AuthRoleDirective,
+    DogFilterComponent,
   ],
   templateUrl: './dog-list.component.html',
   styleUrl: './dog-list.component.scss',
@@ -41,6 +46,7 @@ export class DogListComponent {
   private readonly toastrService = inject(ToastrService);
   private readonly router = inject(Router);
   private readonly dogService: DogService = inject(DogService);
+  readonly rolesAdmin: string[] = ['ADMIN'];
 
   pageConfig = pageConfig;
   operationMessages = operationMessages;
@@ -64,6 +70,16 @@ export class DogListComponent {
     });
   }
 
+  clear() {
+    this.pageConfig.filters = {};
+    this.pageConfig.page = 0;
+    this.dogs = [];
+    this.loadData({
+      first: 0,
+      rows: this.pageConfig.size,
+    });
+  }
+
   confirm(id: string, name: string) {
     const nameBold = `<strong>${name}</strong>`;
     this.confirmationService.confirm({
@@ -84,6 +100,12 @@ export class DogListComponent {
         this.delete(id);
       },
     });
+  }
+
+  search(filter: DogFilterDTO) {
+    this.pageConfig.filters = filter;
+    const page = Math.floor(this.pageConfig.page / this.pageConfig.size);
+    this.loadData({ first: page, rows: pageConfig.size });
   }
 
   getUriImage(dog: DogDTO) {
@@ -112,7 +134,7 @@ export class DogListComponent {
   }
 
   getContactsName(dog: DogDTO) {
-    return dog.contacts.map(x => x.name).join(', ');
+    return dog.contacts.map((x) => x.name).join(', ');
   }
 
   navigationToEdit(id: string) {

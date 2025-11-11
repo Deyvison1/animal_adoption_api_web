@@ -28,7 +28,7 @@ export class AnimalTypeService extends HttpService {
   findAll(
     pageConfig: PageConfigDTO<any>
   ): Observable<PageDTO<AnimalTypeDTO[]>> {
-    const params = buildPaginationParams(pageConfig, pageConfig.filters);
+    const params = buildPaginationParams(pageConfig);
     return this.http.get<PageDTO<AnimalTypeDTO[]>>(`${this.url}`, { params });
   }
 

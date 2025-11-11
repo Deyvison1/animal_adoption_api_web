@@ -20,8 +20,10 @@ export class KeycloakService {
         onLoad: 'check-sso', // permite rotas públicas
         checkLoginIframe: false,
       })
-      .then((authenticated) => {
-      });
+      .then((authenticated) => {});
+  }
+  getRoles(): string[] {
+    return this.keycloak.tokenParsed?.realm_access?.roles ?? [];
   }
 
   getKeycloakInstance(): Keycloak {

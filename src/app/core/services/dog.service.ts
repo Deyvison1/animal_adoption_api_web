@@ -7,6 +7,7 @@ import { DogDTO } from '../../shared/model/dog.dto';
 import { Observable } from 'rxjs';
 import { buildPaginationParams } from '../../shared/utils/http-utils';
 import { DogCreateDTO } from '../../shared/model/dog-create.dto';
+import { DogFilterDTO } from '../../shared/model/dog-filter.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,7 @@ import { DogCreateDTO } from '../../shared/model/dog-create.dto';
 export class DogService extends HttpService {
   private readonly url: string = environment.apiUrl.concat('/dog');
 
-  findAll(pageConfig: PageConfigDTO<any>): Observable<PageDTO<DogDTO[]>> {
+  findAll(pageConfig: PageConfigDTO<DogFilterDTO>): Observable<PageDTO<DogDTO[]>> {
     const params = buildPaginationParams(pageConfig);
     return this.http.get<PageDTO<DogDTO[]>>(`${this.url}`, { params });
   }

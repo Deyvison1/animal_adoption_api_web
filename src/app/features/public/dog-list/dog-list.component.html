@@ -1,6 +1,10 @@
+<div>
+  <app-dog-filter (searchEvent)="search($event)" (clearEvent)="clear()"></app-dog-filter>
+</div>
+
 <div class="dog-list-wrapper" (scroll)="onScroll($event)">
   <div class="dog-list">
-    @for (dog of dogs; track dog.id) {
+    @if(dogs.length) { @for (dog of dogs; track dog.id) {
 
     <p-card class="dog-card">
       <div class="dog-card-content">
@@ -54,6 +58,8 @@
       #contactPreview
       [contacts]="dog.contacts"
     ></app-contact-view>
+    } } @else {
+    <p class="no-dogs-message">Nenhum cachorro encontrado.</p>
     }
   </div>
 </div>

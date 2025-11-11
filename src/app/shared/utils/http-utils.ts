@@ -8,13 +8,12 @@ import { PageConfigDTO } from '../model/page/page-config.dto';
  */
 export function buildPaginationParams<F>(
   pageConfig: PageConfigDTO<F>,
-  filters?: Partial<F>
 ): HttpParams {
   let params = new HttpParams()
     .set('page', pageConfig.page.toString())
     .set('size', pageConfig.size.toString());
-  if (filters) {
-    Object.entries(filters).forEach(([key, value]) => {
+  if (pageConfig.filters) {
+    Object.entries(pageConfig.filters).forEach(([key, value]) => {
       if (value !== null && value !== undefined && value !== '') {
         params = params.set(key, String(value));
       }

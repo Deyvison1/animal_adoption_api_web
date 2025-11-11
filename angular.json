@@ -23,7 +23,7 @@
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-           "assets": ["src/assets"],
+            "assets": ["src/assets"],
             "styles": [
               "node_modules/primeicons/primeicons.css",
               "node_modules/primeflex/primeflex.css",
@@ -53,7 +53,12 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.dev.ts"
                 }
-              ]
+              ],
+              "sourceMap": {
+                "scripts": true,
+                "styles": true,
+                "vendor": true
+              }
             }
           },
           "defaultConfiguration": "production"

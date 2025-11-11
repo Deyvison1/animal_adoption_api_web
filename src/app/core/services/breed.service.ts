@@ -26,7 +26,7 @@ export class BreedService extends HttpService {
   }
 
   findAll(pageConfig: PageConfigDTO<any>): Observable<PageDTO<BreedDTO[]>> {
-    const params = buildPaginationParams(pageConfig, pageConfig.filters);
+    const params = buildPaginationParams(pageConfig);
     return this.http.get<PageDTO<BreedDTO[]>>(`${this.url}`, { params });
   }
 

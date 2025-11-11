@@ -12,6 +12,8 @@ import { AnimalImageDTO } from '../../../shared/model/animal-image.dto';
 import { GalleriaModule } from 'primeng/galleria';
 import { ContactViewComponent } from '../contact-view/contact-view.component';
 import { ContactDTO } from '../../../shared/model/contact.dto';
+import { DogFilterComponent } from '../../../shared/components/dog-filter/dog-filter.component';
+import { DogFilterDTO } from '../../../shared/model/dog-filter.dto';
 
 @Component({
   selector: 'app-dog-list',
@@ -23,6 +25,7 @@ import { ContactDTO } from '../../../shared/model/contact.dto';
     ImageModule,
     GalleriaModule,
     ContactViewComponent,
+    DogFilterComponent,
   ],
   templateUrl: './dog-list.component.html',
   styleUrl: './dog-list.component.scss',
@@ -47,6 +50,14 @@ export class DogListComponent implements OnInit {
     return `data:${dto.contentType};base64,${dto.data}`;
   }
 
+  search(filter: DogFilterDTO) {
+    this.pageConfig.filters = filter;
+    this.pageConfig.page = 0;
+    this.dogs = [];
+    this.allLoaded = false;
+    this.loadDogs();
+  }
+
   onScroll(event: any) {
     const element = event.target;
 
@@ -59,6 +70,14 @@ export class DogListComponent implements OnInit {
       this.pageConfig.page++;
       this.loadDogs();
     }
+  }
+
+  clear() {
+    this.pageConfig.filters = {};
+    this.pageConfig.page = 0;
+    this.dogs = [];
+    this.allLoaded = false;
+    this.loadDogs();
   }
 
   loadDogs() {

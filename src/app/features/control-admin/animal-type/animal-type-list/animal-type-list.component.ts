@@ -18,6 +18,7 @@ import { ButtonGroupModule } from 'primeng/buttongroup';
 import { getPagePrimeng } from '../../../../shared/utils/page-primeng.utils';
 import { AnimalTypeService } from '../../../../core/services/animal-type.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AuthRoleDirective } from '../../../../shared/directives/auth-role.directive';
 
 @Component({
   selector: 'app-animal-type-list',
@@ -31,6 +32,7 @@ import { HttpErrorResponse } from '@angular/common/http';
     ConfirmDialog,
     CardModule,
     ButtonGroupModule,
+    AuthRoleDirective,
   ],
   templateUrl: './animal-type-list.component.html',
   styleUrl: './animal-type-list.component.scss',
@@ -42,6 +44,7 @@ export class AnimalTypeListComponent {
   private readonly router = inject(Router);
   private readonly animalTypeService: AnimalTypeService =
     inject(AnimalTypeService);
+  readonly rolesAdmin: string[] = ['ADMIN'];
 
   pageConfig = pageConfig;
   operationMessages = operationMessages;
