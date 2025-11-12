@@ -108,6 +108,10 @@ export class AnimalTypeListComponent {
     });
   }
 
+  navigationToView(id: string) {
+    this.router.navigate(['admin/animal-type', 'form', id, 'view']);
+  }
+
   navigationToEdit(id: string) {
     this.router.navigate(['admin/animal-type', 'form', id]);
   }

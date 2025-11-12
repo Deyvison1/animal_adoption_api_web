@@ -105,6 +105,10 @@ export class BreedListComponent {
     });
   }
 
+  navigationToView(id: string) {
+    this.router.navigate(['admin/breed', 'form', id, 'view']);
+  }
+
   navigationToEdit(id: string) {
     this.router.navigate(['admin/breed', 'form', id]);
   }

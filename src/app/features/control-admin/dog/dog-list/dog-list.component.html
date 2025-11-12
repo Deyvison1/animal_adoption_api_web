@@ -64,6 +64,13 @@
         </td>
         <td>
           <p-buttongroup>
+             <p-button
+              [appAuthRole]="rolesAdminRead"
+              icon="pi pi-eye"
+              severity="secondary"
+              size="small"
+              (onClick)="navigationToView(dog.id)"
+            />
             <p-button
               [appAuthRole]="rolesAdmin"
               icon="pi pi-pencil"

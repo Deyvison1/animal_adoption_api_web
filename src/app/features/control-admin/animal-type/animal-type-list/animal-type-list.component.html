@@ -33,6 +33,13 @@
           <p-buttongroup>
             <p-button
               [appAuthRole]="rolesAdmin"
+              icon="pi pi-eye"
+              severity="secondary"
+              size="small"
+              (onClick)="navigationToView(animalType.id)"
+            />
+            <p-button
+              [appAuthRole]="rolesAdmin"
               icon="pi pi-pencil"
               severity="secondary"
               size="small"

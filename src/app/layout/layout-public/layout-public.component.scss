@@ -5,6 +5,14 @@
   padding: 1.5rem; /* opcional, mas usual pra não colar conteúdo */
 }
 
-router-outlet {
-  display: block; /* pode deixar pra evitar inline */
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0; /* remove espaçamento inesperado */
+  padding: 0;
+}
+/* Footer sempre no fim */
+app-footer {
+  flex-shrink: 0;
 }

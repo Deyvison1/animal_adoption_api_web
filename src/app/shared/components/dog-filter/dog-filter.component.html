@@ -1,45 +1,106 @@
-<form [formGroup]="form">
-  <div class="grid">
-    <div class="field col-3 md:col-3 lg:col-3">
-      <p-floatlabel>
-        <input
-          pInputText
-          id="name"
-          autocomplete="off"
-          formControlName="name"
-          fluid
-          maxlength="50"
-        />
-        <label for="name">Nome do cachorro</label>
-      </p-floatlabel>
-    </div>
-    <div class="field col-3 md:col-3 lg:col-3">
-      <p-floatlabel>
-        <input
-          pInputText
-          id="breed"
-          autocomplete="off"
-          formControlName="breed"
-          fluid
-          maxlength="50"
-        />
-        <label for="breed">Nome da raça</label>
-      </p-floatlabel>
-    </div>
+<div class="filter-container">
+  <p-button
+    label="Filtros"
+    [icon]="expanded ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"
+    class="mb-3"
+    (onClick)="toggle()"
+  ></p-button>
+
+  <div
+    class="filter-form-wrapper"
+    [@expandCollapse]="expanded ? 'open' : 'closed'"
+  >
+    <form [formGroup]="form">
+      <!-- PrimeFlex grid responsiva -->
+      <div class="grid">
+        <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+          <p-floatlabel>
+            <input
+              pInputText
+              id="name"
+              autocomplete="off"
+              formControlName="name"
+              fluid
+              maxlength="50"
+            />
+            <label for="name">Nome do cachorro</label>
+          </p-floatlabel>
+        </div>
+
+        <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+          <p-floatlabel>
+            <input
+              pInputText
+              id="breed"
+              autocomplete="off"
+              formControlName="breed"
+              fluid
+              maxlength="50"
+            />
+            <label for="breed">Nome da raça</label>
+          </p-floatlabel>
+        </div>
+
+        <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+          <p-floatlabel variant="on">
+            <p-inputnumber
+              formControlName="age"
+              inputId="age"
+              class="w-full"
+              fluid
+            />
+            <label for="age">Idade</label>
+          </p-floatlabel>
+        </div>
+
+        <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+          <p-floatlabel variant="on">
+            <input
+              pInputText
+              id="valueContact"
+              autocomplete="off"
+              formControlName="valueContact"
+              maxlength="50"
+              fluid
+              (input)="onValueInput($event)"
+            />
+            <label for="valueContact">Telefone / E-mail</label>
+          </p-floatlabel>
+          <app-erro [control]="form.get('valueContact')"></app-erro>
+        </div>
+
+        <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+          <p-floatlabel>
+            <input
+              pInputText
+              id="nameContact"
+              autocomplete="off"
+              formControlName="nameContact"
+              fluid
+              maxlength="50"
+            />
+            <label for="nameContact">Nome do responsável</label>
+          </p-floatlabel>
+        </div>
+      </div>
+
+      <!-- Botões centralizados e responsivos -->
+      <div
+        class="flex flex-wrap gap-2 mt-3 justify-content-start sm:justify-content-end"
+      >
+        <p-button
+          label="Filtrar"
+          icon="pi pi-filter"
+          (onClick)="search()"
+        ></p-button>
+        <p-button
+          label="Limpar"
+          severity="warn"
+          icon="pi pi-times"
+          class="p-button-secondary"
+          (onClick)="clear()"
+        ></p-button>
+      </div>
+    </form>
   </div>
-  <div class="p-mt-3">
-    <p-button
-      label="Filtrar"
-      icon="pi pi-filter"
-      class="p-mr-2"
-      (onClick)="search()"
-    ></p-button>
-    <p-button
-      label="Limpar"
-      severity="warn"
-      icon="pi pi-times"
-      class="p-button-secondary"
-      (onClick)="clear()"
-    ></p-button>
-  </div>
-</form>
+</div>

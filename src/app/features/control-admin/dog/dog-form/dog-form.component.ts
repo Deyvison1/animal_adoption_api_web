@@ -38,6 +38,7 @@ import { converter } from '../../../../shared/utils/image-converter.util';
 import { TextareaModule } from 'primeng/textarea';
 import { ContactComponent } from '../contact/contact.component';
 import { emailOrPhoneValidator } from '../../../../shared/validators/email-or-phone.validator';
+import { AuthRoleDirective } from '../../../../shared/directives/auth-role.directive';
 
 @Component({
   selector: 'app-dog-form',
@@ -58,6 +59,7 @@ import { emailOrPhoneValidator } from '../../../../shared/validators/email-or-ph
     GalleriaModule,
     TextareaModule,
     ContactComponent,
+    AuthRoleDirective
   ],
   templateUrl: './dog-form.component.html',
   styleUrl: './dog-form.component.scss',
@@ -73,6 +75,7 @@ export class DogFormComponent implements OnInit {
     inject(AnimalImageService);
   private readonly route = inject(ActivatedRoute);
   private readonly router: Router = inject(Router);
+  readonly rolesAdmin: string[] = ['ADMIN'];
 
   private readonly operationMessages = operationMessages;
   id: string;
@@ -81,6 +84,7 @@ export class DogFormComponent implements OnInit {
   images = signal<BaseImageDTO[]>([]);
   dogSelected: DogDTO;
   activeIndex = signal(0);
+  isViewMode: boolean = false;
 
   form: FormGroup;
   title: string = 'Cadastrar cachorro';
@@ -214,10 +218,10 @@ export class DogFormComponent implements OnInit {
         resp.contacts?.forEach((contact) => {
           contactsArray.push(
             this.fb.group({
-              id: [contact.id || null],
-              name: [contact.name || '', [Validators.required]],
+              id: [{ value: contact.id || null, disabled: this.isViewMode }],
+              name: [{ value: contact.name || '', disabled: this.isViewMode }, [Validators.required]],
               value: [
-                contact.value || '',
+                { value: contact.value || '', disabled: this.isViewMode },
                 [Validators.required, emailOrPhoneValidator()],
               ],
             })
@@ -241,6 +245,14 @@ export class DogFormComponent implements OnInit {
       this.form.patchValue({
         available: true,
       });
+    }
+     this.isViewMode = this.route.snapshot.url.some(
+      (segment) => segment.path === 'view'
+    );
+
+    if (this.isViewMode) {
+      this.title = 'Visualizar cachorro';
+      this.form.disable();
     }
   }
 
@@ -345,4 +357,5 @@ export class DogFormComponent implements OnInit {
       },
     });
   }
+  
 }

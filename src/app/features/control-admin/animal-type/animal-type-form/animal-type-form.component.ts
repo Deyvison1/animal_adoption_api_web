@@ -46,6 +46,7 @@ export class AnimalTypeFormComponent implements OnInit {
 
   form: FormGroup;
   title: string = 'Cadastrar tipo';
+  isViewMode: boolean = false;
 
   ngOnInit(): void {
     this.initForm();
@@ -107,12 +108,21 @@ export class AnimalTypeFormComponent implements OnInit {
 
   private checkIfUpdate(): void {
     this.id = this.route.snapshot.paramMap.get('id') ?? '';
+
     this.title = this.id ? 'Atualizar tipo' : 'Cadastrar tipo';
 
     if (this.id) {
       this.findById(this.id);
     } else {
       this.form.reset();
+    }
+
+    this.isViewMode = this.route.snapshot.url.some(
+      (segment) => segment.path === 'view'
+    );
+
+    if (this.isViewMode) {
+      this.form.disable();
     }
   }
 }

@@ -3,7 +3,6 @@
 
   <form [formGroup]="form">
     <div class="formgrid grid">
-
       <!-- Nome -->
       <div class="field col-12 md:col-6 lg:col-4">
         <p-floatlabel variant="on">
@@ -23,13 +22,17 @@
         </p-floatlabel>
         <app-erro [control]="form.get('name')"></app-erro>
       </div>
-
     </div>
 
+    @if(!isViewMode) {
     <!-- Botão -->
     <div class="flex justify-content-end mt-4">
-      <p-button label="Salvar" [disabled]="form.invalid" (onClick)="save()"></p-button>
+      <p-button
+        label="Salvar"
+        [disabled]="form.invalid"
+        (onClick)="save()"
+      ></p-button>
     </div>
-
+    }
   </form>
 </p-card>

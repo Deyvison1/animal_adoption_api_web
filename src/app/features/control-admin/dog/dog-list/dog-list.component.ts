@@ -47,6 +47,7 @@ export class DogListComponent {
   private readonly router = inject(Router);
   private readonly dogService: DogService = inject(DogService);
   readonly rolesAdmin: string[] = ['ADMIN'];
+  readonly rolesAdminRead: string[] = ['ADMIN', 'ADMIN_READ'];
 
   pageConfig = pageConfig;
   operationMessages = operationMessages;
@@ -135,6 +136,10 @@ export class DogListComponent {
 
   getContactsName(dog: DogDTO) {
     return dog.contacts.map((x) => x.name).join(', ');
+  }
+
+  navigationToView(id: string) {
+    this.router.navigate(['admin/dog', 'form', id, 'view']);
   }
 
   navigationToEdit(id: string) {

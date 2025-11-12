@@ -53,6 +53,7 @@ export class BreedFormComponent implements OnInit {
   id: string;
   title: string = 'Cadastrar raça';
   types: AnimalTypeDTO[] = [];
+  isViewMode: boolean = false;
 
   ngOnInit(): void {
     this.initForm();
@@ -132,6 +133,10 @@ export class BreedFormComponent implements OnInit {
       this.findById(this.id);
     } else {
       this.form.reset();
+    }
+    this.isViewMode = this.route.snapshot.url.some(segment => segment.path === 'view');
+    if (this.isViewMode) {
+      this.form.disable();
     }
   }
 

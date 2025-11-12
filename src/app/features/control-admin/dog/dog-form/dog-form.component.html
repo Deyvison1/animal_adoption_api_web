@@ -80,6 +80,7 @@
           maxFileSize="1000000"
           chooseLabel="Browse"
           (onSelect)="onFileSelected($event)"
+          [disabled]="isViewMode"
         />
       </div>
       }
@@ -108,13 +109,18 @@
     </div>
 
     <div class="formgrid grid">
-      <app-contact [form]="contactsFormArray"></app-contact>
+      <app-contact
+        [form]="contactsFormArray"
+        [isViewMode]="isViewMode"
+      ></app-contact>
     </div>
 
+    @if(!isViewMode) {
     <!-- Botão -->
     <div class="flex justify-content-end mt-4">
       <p-button label="Salvar" (onClick)="save()"></p-button>
     </div>
+    }
 
     <p-galleria
       [value]="imagesArray"
@@ -126,6 +132,7 @@
       [responsiveOptions]="responsiveOptions"
       [containerStyle]="{ 'max-width': '640px' }"
       [responsiveOptions]="responsiveOptions"
+      class="p-3"
     >
       <ng-template #item let-item let-i="index">
         <div
@@ -141,6 +148,7 @@
             class="img"
           />
 
+          @if(!isViewMode) {
           <div class="icon-active" (click)="setActiveImage(item)">
             <i
               class="pi"
@@ -148,10 +156,10 @@
               style="font-size: 1.2rem; color: #2196f3"
             ></i>
           </div>
-
           <!-- Botão de remover -->
           <div class="btn-remove">
             <p-button
+              [appAuthRole]="rolesAdmin"
               icon="pi pi-times"
               severity="danger"
               [rounded]="true"
@@ -159,6 +167,7 @@
               [disabled]="item?.active"
             ></p-button>
           </div>
+          }
         </div>
       </ng-template>
     </p-galleria>

@@ -43,6 +43,7 @@
       [rounded]="true"
       severity="success"
       (click)="addContact()"
+      [disabled]="isViewMode()"
     />
     @if(contacts.length > 1) {
     <p-button
@@ -51,6 +52,7 @@
       [rounded]="true"
       severity="danger"
       (click)="removeContact($index)"
+      [disabled]="isViewMode()"
     />
     }
   </div>

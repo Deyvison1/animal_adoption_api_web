@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, output } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -16,6 +16,10 @@ import { types } from '../../../../core/constants/contact-type.constants';
 import { emailOrPhoneValidator } from '../../../../shared/validators/email-or-phone.validator';
 import { MessageModule } from 'primeng/message';
 import { ContactDTO } from '../../../../shared/model/contact.dto';
+import {
+  ContactFormatPipe,
+  ContactFormatService,
+} from '../../../../shared/utils/contact-format.utils';
 
 @Component({
   selector: 'app-contact',
@@ -35,9 +39,12 @@ import { ContactDTO } from '../../../../shared/model/contact.dto';
 })
 export class ContactComponent implements OnInit {
   private readonly fb: FormBuilder = inject(FormBuilder);
+  private readonly contactFormatService = inject(ContactFormatService);
+
   form = input<FormArray>();
   types = types;
   isEmail: boolean = false;
+  isViewMode = input.required<boolean>();
 
   get contacts(): FormArray<FormGroup> {
     return this.form();
@@ -53,13 +60,13 @@ export class ContactComponent implements OnInit {
   loadContactsFromDto(contactsDto: ContactDTO[]) {
     // Limpa o FormArray existente
     this.contacts.clear();
-
+    const isDisabled = this.isViewMode ? { disabled: true } : {};
     contactsDto.forEach((dto) => {
       const group = this.fb.group({
-        id: [dto.id || null],
-        name: [dto.name || '', [Validators.required]],
+        id: [{ value: dto.id || null, ...isDisabled }],
+        name: [{ value: dto.name || '', ...isDisabled }, [Validators.required]],
         value: [
-          dto.value || '',
+          { value: dto.value || '', ...isDisabled },
           [Validators.required, emailOrPhoneValidator()],
         ],
       });
@@ -77,53 +84,22 @@ export class ContactComponent implements OnInit {
   }
 
   addContact() {
+    const isDisabled = this.isViewMode() ? { disabled: true } : {disabled: false};
+
     this.contacts.push(
       this.fb.group({
-        id: [],
-        name: ['', [Validators.required]],
-        value: ['', [Validators.required, emailOrPhoneValidator()]],
+        id: [{ value: null, ...isDisabled }],
+        name: [{ value: '', ...isDisabled }, [Validators.required]],
+        value: [
+          { value: '', ...isDisabled },
+          [Validators.required, emailOrPhoneValidator()],
+        ],
       })
     );
   }
   onValueInput(event: Event, item: FormGroup) {
     const input = event.target as HTMLInputElement;
-    const control = item.get('value');
-    const rawValue = input.value;
-
-    // Detecta email (qualquer letra ou @)
-    const isEmail = /[a-zA-Z@]/.test(rawValue);
-
-    if (isEmail) {
-      // Email: seta valor cru
-      control.setValue(rawValue);
-    } else {
-      // Telefone: remove tudo que não é número
-      let numbers = rawValue.replace(/\D/g, '');
-
-      if (numbers.length === 0) {
-        control.setValue('');
-      } else if (numbers.length <= 2) {
-        control.setValue(`(${numbers}`);
-      } else if (numbers.length <= 6) {
-        // telefone fixo parcial: (XX) XXXX
-        control.setValue(`(${numbers.slice(0, 2)}) ${numbers.slice(2)}`);
-      } else if (numbers.length <= 10) {
-        // telefone fixo completo: (XX) XXXX-XXXX
-        control.setValue(
-          `(${numbers.slice(0, 2)}) ${numbers.slice(2, 6)}-${numbers.slice(6)}`
-        );
-      } else {
-        // celular: (XX) XXXXX-XXXX
-        control.setValue(
-          `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(
-            7,
-            11
-          )}`
-        );
-      }
-    }
-
-    // força validação
-    control.updateValueAndValidity();
+    const formatted = this.contactFormatService.format(input.value);
+    item.get('value')?.setValue(formatted);
   }
 }
