@@ -15,13 +15,13 @@ COPY . .
 
 # Build Angular para produção
 # Substitua "animal-adoption" pelo nome real do seu projeto Angular
-RUN npm run build -- --output-path=dist/animal-adoption --configuration production
+RUN npm run build -- --output-path=dist/animal-adoption-web --configuration production
 
 # Etapa 2: Servir com Nginx
 FROM nginx:alpine
 
 # Copiar build para a pasta padrão do Nginx
-COPY --from=build /app/dist/animal-adoption /usr/share/nginx/html
+COPY --from=build /app/dist/animal-adoption-web /usr/share/nginx/html
 
 # Copiar configuração personalizada do Nginx (opcional)
 # COPY nginx.conf /etc/nginx/conf.d/default.conf
