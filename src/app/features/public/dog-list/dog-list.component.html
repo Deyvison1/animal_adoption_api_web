@@ -11,7 +11,7 @@
         <!-- IMAGENS -->
         <div class="dog-image-wrapper">
           <p-carousel
-            [value]="dog.images"
+            [value]="dog.imagesComplet"
             [numVisible]="1"
             [numScroll]="1"
             [circular]="false"
@@ -21,7 +21,7 @@
           >
             <ng-template pTemplate="item" let-img>
               <img
-                [src]="getUriImages(img)"
+                [src]="img.url"
                 [alt]="dog.name"
                 class="carousel-img"
               />

@@ -34,7 +34,6 @@ import { FileSelectEvent, FileUploadModule } from 'primeng/fileupload';
 import { BaseImageDTO } from '../../../../shared/model/base/base-image.dto';
 import { AnimalImageDTO } from '../../../../shared/model/animal-image.dto';
 import { AnimalImageService } from '../../../../core/services/animal-image.service';
-import { converter } from '../../../../shared/utils/image-converter.util';
 import { TextareaModule } from 'primeng/textarea';
 import { ContactComponent } from '../contact/contact.component';
 import { emailOrPhoneValidator } from '../../../../shared/validators/email-or-phone.validator';
@@ -59,7 +58,7 @@ import { AuthRoleDirective } from '../../../../shared/directives/auth-role.direc
     GalleriaModule,
     TextareaModule,
     ContactComponent,
-    AuthRoleDirective
+    AuthRoleDirective,
   ],
   templateUrl: './dog-form.component.html',
   styleUrl: './dog-form.component.scss',
@@ -94,7 +93,7 @@ export class DogFormComponent implements OnInit {
     { breakpoint: '575px', numVisible: 1 },
   ];
 
-  get imagesArray(): any[] {
+  get imagesArray(): BaseImageDTO[] {
     return this.images();
   }
 
@@ -188,18 +187,19 @@ export class DogFormComponent implements OnInit {
   }
 
   private loadImages(images: AnimalImageDTO[]): void {
-    const mapped = converter<AnimalImageDTO>(images);
+    if (images && images.length > 0) {
+      this.images.set(images.map((image) => this.initImage(image)));
 
-    this.images.set(mapped);
-
-    const active = mapped.find((img) => img.active);
-    if (active) this.form.patchValue({ activeImage: active.filename });
+      const active = images.find((img) => img.active);
+      this.activeIndex.set(active ? images.indexOf(active) : 0);
+      if (active) this.form.patchValue({ activeImage: active.filename });
+    }
   }
   private findById(id: string) {
     this.dogService.findById(id).subscribe({
       next: (resp: DogDTO) => {
         this.dogSelected = resp;
-        this.loadImages(resp.images);
+        this.loadImages(resp.imagesComplet);
 
         // Preenche os campos simples
         this.form.patchValue({
@@ -219,7 +219,10 @@ export class DogFormComponent implements OnInit {
           contactsArray.push(
             this.fb.group({
               id: [{ value: contact.id || null, disabled: this.isViewMode }],
-              name: [{ value: contact.name || '', disabled: this.isViewMode }, [Validators.required]],
+              name: [
+                { value: contact.name || '', disabled: this.isViewMode },
+                [Validators.required],
+              ],
               value: [
                 { value: contact.value || '', disabled: this.isViewMode },
                 [Validators.required, emailOrPhoneValidator()],
@@ -246,7 +249,7 @@ export class DogFormComponent implements OnInit {
         available: true,
       });
     }
-     this.isViewMode = this.route.snapshot.url.some(
+    this.isViewMode = this.route.snapshot.url.some(
       (segment) => segment.path === 'view'
     );
 
@@ -265,18 +268,25 @@ export class DogFormComponent implements OnInit {
   }
 
   private activateImage(id: string): void {
-    this.animalImageService.activateImage(id).subscribe({
-      next: () =>
-        this.toastrService.showSucess(
-          this.operationMessages.SUCCESS,
-          'A imagem foi definida como ativa.'
-        ),
-      error: (err) =>
-        this.toastrService.showErro(
-          this.operationMessages.ERRO,
-          err.error?.message
-        ),
-    });
+    this.animalImageService
+      .activateImage(
+        id,
+        this.imagesArray.map((img) => img.id)
+      )
+      .subscribe({
+        next: () => {
+          this.activeIndex.set(this.imagesArray.findIndex((x) => x.id === id));
+          this.toastrService.showSucess(
+            this.operationMessages.SUCCESS,
+            'A imagem foi definida como ativa.'
+          );
+        },
+        error: (err) =>
+          this.toastrService.showErro(
+            this.operationMessages.ERRO,
+            err.error?.message
+          ),
+      });
   }
 
   removeImage(item: AnimalImageDTO): void {
@@ -288,7 +298,7 @@ export class DogFormComponent implements OnInit {
       return;
     }
 
-    this.animalImageService.remove(item.id).subscribe({
+    this.animalImageService.remove(item.id, this.id).subscribe({
       next: () => {
         this.images.update((imgs) => {
           const filtered = imgs.filter((img) => img?.id !== item?.id);
@@ -326,8 +336,8 @@ export class DogFormComponent implements OnInit {
       filename: image.filename,
       title: image.filename,
       contentType: image.contentType,
-      itemImageSrc: `data:${image.contentType};base64,${image.data}`,
-      thumbnailImageSrc: `data:${image.contentType};base64,${image.data}`,
+      itemImageSrc: `${image.url}`,
+      thumbnailImageSrc: `${image.url}`,
       active: image.active,
     };
   }
@@ -350,12 +360,18 @@ export class DogFormComponent implements OnInit {
         );
       },
       error: (err: HttpErrorResponse) => {
-        this.toastrService.showErro(
-          this.operationMessages.ERRO,
-          err.error.message
-        );
+        if (err.status === 409) {
+          this.toastrService.showWarn(
+            this.operationMessages.ERRO,
+            err.error?.message
+          );
+        } else {
+          this.toastrService.showErro(
+            this.operationMessages.ERRO,
+            err.error?.message
+          );
+        }
       },
     });
   }
-  
 }

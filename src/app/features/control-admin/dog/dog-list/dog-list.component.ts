@@ -20,6 +20,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { AuthRoleDirective } from '../../../../shared/directives/auth-role.directive';
 import { DogFilterComponent } from '../../../../shared/components/dog-filter/dog-filter.component';
 import { DogFilterDTO } from '../../../../shared/model/dog-filter.dto';
+import { AnimalImageDTO } from '../../../../shared/model/animal-image.dto';
 
 @Component({
   selector: 'app-dog-list',
@@ -71,6 +72,11 @@ export class DogListComponent {
     });
   }
 
+  getUriImageActive(images: AnimalImageDTO[]): string {
+    const activeImage = images.find((img) => img.active);
+    return activeImage ? activeImage.url : images[0].url;
+  }
+
   clear() {
     this.pageConfig.filters = {};
     this.pageConfig.page = 0;
@@ -107,13 +113,6 @@ export class DogListComponent {
     this.pageConfig.filters = filter;
     const page = Math.floor(this.pageConfig.page / this.pageConfig.size);
     this.loadData({ first: page, rows: pageConfig.size });
-  }
-
-  getUriImage(dog: DogDTO) {
-    if (dog.images?.length) {
-      return `data:${dog.images[0].contentType};base64,${dog.images[0].data}`;
-    }
-    return '';
   }
 
   private delete(id: string) {

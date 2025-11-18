@@ -8,6 +8,7 @@ export interface AnimalDTO extends BaseDTO {
   age: number;
   breed: BreedDTO;
   description: string;
-  images: AnimalImageDTO[];
+  images: string[];
+  imagesComplet: AnimalImageDTO[];
   contacts: ContactDTO[];
 }

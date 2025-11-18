@@ -21,11 +21,11 @@ export class AnimalImageService extends HttpService {
     );
   }
 
-  activateImage(id: string): Observable<void> {
-    return this.http.put<void>(`${this.url}/${id}/activate`, {});
+  activateImage(id: string, ids: string[]): Observable<void> {
+    return this.http.patch<void>(`${this.url}/${id}/activate?idIsDisabled=${ids}`, {});
   }
 
-  remove(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.url}/${id}`);
+  remove(id: string, dogId: string): Observable<void> {
+    return this.http.delete<void>(`${this.url}/${id}/${dogId}`);
   }
 }

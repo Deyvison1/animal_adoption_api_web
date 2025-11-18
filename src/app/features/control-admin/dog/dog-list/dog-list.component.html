@@ -32,9 +32,9 @@
     <ng-template pTemplate="body" let-dog>
       <tr>
         <td>
-          @if(dog.images.length) {
+          @if(dog.imagesComplet?.length) {
           <p-image
-            [src]="getUriImage(dog)"
+            [src]="getUriImageActive(dog.imagesComplet)"
             alt="Image"
             width="90"
             [preview]="true"

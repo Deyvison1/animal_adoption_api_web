@@ -8,12 +8,11 @@ import { ImageModule } from 'primeng/image';
 import { PublicService } from '../../../core/services/public.service';
 import { PageConfigDTO } from '../../../shared/model/page/page-config.dto';
 import { pageConfig } from '../../../core/constants/page-config.constants';
-import { AnimalImageDTO } from '../../../shared/model/animal-image.dto';
 import { GalleriaModule } from 'primeng/galleria';
 import { ContactViewComponent } from '../contact-view/contact-view.component';
-import { ContactDTO } from '../../../shared/model/contact.dto';
 import { DogFilterComponent } from '../../../shared/components/dog-filter/dog-filter.component';
 import { DogFilterDTO } from '../../../shared/model/dog-filter.dto';
+import { ToastrService } from '../../../core/services/toastr.service';
 
 @Component({
   selector: 'app-dog-list',
@@ -28,10 +27,11 @@ import { DogFilterDTO } from '../../../shared/model/dog-filter.dto';
     DogFilterComponent,
   ],
   templateUrl: './dog-list.component.html',
-  styleUrl: './dog-list.component.scss',
+  styleUrls: ['./dog-list.component.scss'],
 })
 export class DogListComponent implements OnInit {
   private readonly publicService: PublicService = inject(PublicService);
+  private readonly toastrService: ToastrService = inject(ToastrService);
   dogs: DogDTO[] = [];
   pageConfig: PageConfigDTO<any> = pageConfig;
   loading = true;
@@ -39,15 +39,6 @@ export class DogListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadDogs();
-  }
-
-  getUriImageActive(dto: AnimalImageDTO[]) {
-    const active = dto.find((x) => x.active);
-    return `data:${active.contentType};base64,${active.data}`;
-  }
-
-  getUriImages(dto: AnimalImageDTO) {
-    return `data:${dto.contentType};base64,${dto.data}`;
   }
 
   search(filter: DogFilterDTO) {
@@ -82,7 +73,6 @@ export class DogListComponent implements OnInit {
 
   loadDogs() {
     this.loading = true;
-
     this.publicService.findAllDogs(this.pageConfig).subscribe({
       next: (newDogs) => {
         if (newDogs.content.length === 0) {
@@ -91,7 +81,7 @@ export class DogListComponent implements OnInit {
           this.dogs = [...this.dogs, ...newDogs.content];
         }
       },
-      error: (err) => console.error(err),
+      error: (err) => this.toastrService.showErro('Erro', 'Falha ao buscar dados.'),
       complete: () => {
         this.loading = false;
       },
