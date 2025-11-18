@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  angular-app:
+    build: .
+    container_name: front-adoption-animal
+    restart: unless-stopped
+    ports:
+      - "4200:80"  # Porta do host : porta do Nginx no container
+    networks:
+      - controlimage_network
+
+networks:
+  controlimage_network:
+    external: true
