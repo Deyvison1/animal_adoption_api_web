@@ -29,6 +29,7 @@
               "node_modules/primeflex/primeflex.css",
               "src/styles.scss"
             ],
+            "ssr": false,
             "scripts": []
           },
           "configurations": {
