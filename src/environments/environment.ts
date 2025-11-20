@@ -7,6 +7,6 @@ export const environment = {
     realm: 'ANIMAL_ADOPTION',
     clientId: 'ANIMAL_ADOPTION_CLIENT',
     urlAccount:
-      'https://keycloak:8443/realms/ANIMAL_ADOPTION/account/',
+      'https://keycloak.barbershop-app.shop:8443/realms/ANIMAL_ADOPTION/account/',
   },
 };
