@@ -1,7 +1,7 @@
 services:
   angular-app:
     build: .
-    container_name: front-adoption-animal
+    container_name: adoption-animal-app
     restart: unless-stopped
     ports:
       - "4200:80"    # HTTP -> redireciona para HTTPS
