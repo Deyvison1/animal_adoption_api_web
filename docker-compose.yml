@@ -4,8 +4,8 @@ services:
     container_name: adoption-animal-app
     restart: unless-stopped
     ports:
-      - "4200:80"    # HTTP -> redireciona para HTTPS
-      - "4443:443"   # HTTPS
+      - "80:80"     # HTTP -> redireciona para HTTPS
+      - "443:443"   # HTTPS padrão SEM PORTA
     networks:
       - controlimage_network
 
