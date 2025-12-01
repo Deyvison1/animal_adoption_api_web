@@ -64,7 +64,7 @@ export const routes: Routes = [
             canActivate: [AuthGuard],
             data: { roles: ['ADMIN'] },
           },
-           {
+          {
             path: 'form/:id/view',
             loadComponent: () =>
               import(
@@ -80,6 +80,7 @@ export const routes: Routes = [
                 './features/control-admin/dog/dog-list/dog-list.component'
               ).then((r) => r.DogListComponent),
             canActivate: [AuthGuard],
+            data: { roles: ['ADMIN', 'ADMIN_READ'] },
           },
         ],
       },
@@ -108,9 +109,9 @@ export const routes: Routes = [
                 './features/control-admin/animal-type/animal-type-form/animal-type-form.component'
               ).then((r) => r.AnimalTypeFormComponent),
             canActivate: [AuthGuard],
-              data: { roles: ['ADMIN'] },
+            data: { roles: ['ADMIN'] },
           },
-           {
+          {
             path: 'form/:id/view',
             loadComponent: () =>
               import(
@@ -126,6 +127,7 @@ export const routes: Routes = [
                 './features/control-admin/animal-type/animal-type-list/animal-type-list.component'
               ).then((r) => r.AnimalTypeListComponent),
             canActivate: [AuthGuard],
+            data: { roles: ['ADMIN', 'ADMIN_READ'] },
           },
         ],
       },
@@ -155,7 +157,7 @@ export const routes: Routes = [
             canActivate: [AuthGuard],
             data: { roles: ['ADMIN'] },
           },
-           {
+          {
             path: 'form/:id/view',
             loadComponent: () =>
               import(
@@ -171,6 +173,7 @@ export const routes: Routes = [
                 './features/control-admin/breed/breed-list/breed-list.component'
               ).then((r) => r.BreedListComponent),
             canActivate: [AuthGuard],
+            data: { roles: ['ADMIN', 'ADMIN_READ'] },
           },
         ],
       },
