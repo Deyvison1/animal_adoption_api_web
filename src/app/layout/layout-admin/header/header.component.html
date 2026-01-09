@@ -31,7 +31,7 @@
     type="button"
     icon="pi pi-user"
     class="p-button-rounded p-button-outlined profile-button"
-    label="Perfil"
+    [label]="getNameProfile()"
     (click)="toggleProfileMenu($event)"
   ></button>
 </header>

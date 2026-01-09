@@ -25,6 +25,23 @@ export class KeycloakService {
   getRoles(): string[] {
     return this.keycloak.tokenParsed?.realm_access?.roles ?? [];
   }
+  getUserProfile(): {
+    username: string;
+    firstName?: string;
+    lastName?: string;
+  } | null {
+    if (!this.keycloak?.tokenParsed) {
+      return null;
+    }
+
+    const tokenParsed = this.keycloak.tokenParsed as KeycloakDecodedToken;
+
+    return {
+      username: tokenParsed['preferred_username'] ?? '',
+      firstName: tokenParsed['given_name'],
+      lastName: tokenParsed['family_name'],
+    };
+  }
 
   getKeycloakInstance(): Keycloak {
     if (!this.keycloak) throw new Error('Keycloak não inicializado');

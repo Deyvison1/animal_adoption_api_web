@@ -24,6 +24,11 @@ export class HeaderComponent {
     this.profileMenu.toggle(event);
   }
 
+  getNameProfile(): string {
+    const profile = this.keycloakService.getUserProfile();
+    return profile ? profile.firstName || profile.username : 'Usuário';
+  }
+
   openNotifications() {
     console.log('Abrir painel de notificações!');
   }
