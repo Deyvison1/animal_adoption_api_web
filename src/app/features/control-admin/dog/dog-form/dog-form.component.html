@@ -111,6 +111,7 @@
         @if(!isViewMode && form.get('available')?.value === true &&
         form.get('published')?.value === false) {
         <p-button
+          [appAuthRole]="rolesAdminPublished"
           label="Publicar"
           (onClick)="publishDog()"
           icon="pi pi-eye"
@@ -122,6 +123,7 @@
         } @else if(!isViewMode && form.get('available')?.value === true &&
         form.get('published')?.value === true) {
         <p-button
+          [appAuthRole]="rolesAdminPublished"
           label="Despublicar"
           (onClick)="unpublishDog()"
           icon="pi pi-eye-slash"

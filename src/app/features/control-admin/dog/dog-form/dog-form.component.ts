@@ -76,6 +76,7 @@ export class DogFormComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router: Router = inject(Router);
   readonly rolesAdmin: string[] = ['ADMIN'];
+  readonly rolesAdminPublished: string[] = ['ADMIN_PUBLISH'];
 
   private readonly operationMessages = operationMessages;
   id: string;
