@@ -49,6 +49,17 @@ export class DogListComponent implements OnInit {
     this.loadDogs();
   }
 
+  getDogImages(dog: DogDTO) {
+    if (!dog.imagesComplet) return [];
+
+    // separa ativa e não ativas
+    const active = dog.imagesComplet.filter((img) => img.active);
+    const others = dog.imagesComplet.filter((img) => !img.active);
+
+    // retorna com a ativa primeiro
+    return [...active, ...others];
+  }
+
   onScroll(event: any) {
     const element = event.target;
 
@@ -81,7 +92,8 @@ export class DogListComponent implements OnInit {
           this.dogs = [...this.dogs, ...newDogs.content];
         }
       },
-      error: (err) => this.toastrService.showErro('Erro', 'Falha ao buscar dados.'),
+      error: (err) =>
+        this.toastrService.showErro('Erro', 'Falha ao buscar dados.'),
       complete: () => {
         this.loading = false;
       },

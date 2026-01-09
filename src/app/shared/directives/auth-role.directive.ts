@@ -1,4 +1,11 @@
-import { Directive, ElementRef, inject, Input, OnInit } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  inject,
+  Input,
+  OnInit,
+  Renderer2,
+} from '@angular/core';
 import { KeycloakService } from '../../core/services/keycloak.service';
 
 @Directive({
@@ -7,20 +14,22 @@ import { KeycloakService } from '../../core/services/keycloak.service';
 export class AuthRoleDirective implements OnInit {
   private readonly keycloakService = inject(KeycloakService);
   private readonly el = inject(ElementRef);
+  private readonly renderer = inject(Renderer2);
+
   @Input({ required: true }) appAuthRole!: string[];
 
   ngOnInit(): void {
-    this.hideElement();
+    this.applyVisibility();
   }
 
-  hideElement() {
-    if (!this.hasAnyRealmRole()) {
-      this.el.nativeElement.style.display = 'none';
-      this.el.nativeElement.remove();
+  private applyVisibility() {
+    const allowed = this.keycloakService.hasAnyRole(this.appAuthRole);
+
+    if (allowed) {
+      this.renderer.removeStyle(this.el.nativeElement, 'display');
+      return;
     }
-  }
 
-  hasAnyRealmRole(): boolean {
-    return this.keycloakService.hasAnyRole(this.appAuthRole);
+    this.renderer.setStyle(this.el.nativeElement, 'display', 'none');
   }
 }

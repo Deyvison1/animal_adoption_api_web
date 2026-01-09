@@ -38,6 +38,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { ContactComponent } from '../contact/contact.component';
 import { emailOrPhoneValidator } from '../../../../shared/validators/email-or-phone.validator';
 import { AuthRoleDirective } from '../../../../shared/directives/auth-role.directive';
+import { publish } from 'rxjs';
 
 @Component({
   selector: 'app-dog-form',
@@ -183,6 +184,41 @@ export class DogFormComponent implements OnInit {
       images: this.fb.array([]),
       contacts: this.fb.array([]),
       activeImage: [''],
+      published: [],
+    });
+  }
+
+  publishDog(): void {
+    this.dogService.isPublish(this.id).subscribe({
+      next: () => {
+        this.toastrService.showSucess(
+          this.operationMessages.SUCCESS,
+          'Cachorro publicado com sucesso.'
+        );
+        this.form.patchValue({ published: true });
+      },
+      error: (err) =>
+        this.toastrService.showErro(
+          this.operationMessages.ERRO,
+          err.error?.message
+        ),
+    });
+  }
+
+  unpublishDog(): void {
+    this.dogService.notPublish(this.id).subscribe({
+      next: () => {
+        this.toastrService.showSucess(
+          this.operationMessages.SUCCESS,
+          'Cachorro despublicado com sucesso.'
+        );
+        this.form.patchValue({ published: false });
+      },
+      error: (err) =>
+        this.toastrService.showErro(
+          this.operationMessages.ERRO,
+          err.error?.message
+        ),
     });
   }
 
@@ -209,6 +245,7 @@ export class DogFormComponent implements OnInit {
           breedId: resp.breed.id,
           available: resp.available,
           description: resp.description,
+          published: resp.published,
         });
 
         // Preenche o FormArray de contatos

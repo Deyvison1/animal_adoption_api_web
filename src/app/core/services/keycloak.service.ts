@@ -68,7 +68,7 @@ export class KeycloakService {
     if (!this.keycloak) throw new Error('Keycloak não inicializado');
 
     const options: Keycloak.KeycloakLoginOptions = {
-      redirectUri: redirectUri || window.location.origin + '/admin',
+      redirectUri: redirectUri || globalThis.location.origin + '/admin',
     };
 
     this.keycloak.login(options);

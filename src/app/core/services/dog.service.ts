@@ -35,4 +35,12 @@ export class DogService extends HttpService {
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.url}/${id}`);
   }
+
+  isPublish(id: string): Observable<void> {
+    return this.http.get<void>(`${this.url}/is-publish/${id}`);
+  }
+
+  notPublish(id: string): Observable<void> {
+    return this.http.get<void>(`${this.url}/not-publish/${id}`);
+  }
 }

@@ -11,7 +11,7 @@
         <!-- IMAGENS -->
         <div class="dog-image-wrapper">
           <p-carousel
-            [value]="dog.imagesComplet"
+            [value]="getDogImages(dog)"
             [numVisible]="1"
             [numScroll]="1"
             [circular]="false"

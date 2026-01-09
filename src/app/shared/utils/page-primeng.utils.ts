@@ -5,13 +5,14 @@ export const getPagePrimeng = <T>(
   event: TableLazyLoadEvent,
   filters?: T
 ): PageConfigDTO<T> => {
-  const first = event.first ?? 0;
   const size = event.rows ?? 10;
-  const page = Math.floor(first / size);
+  const first = event.first ?? 0;
+
+  const page = size > 0 ? Math.floor(first / size) : 0;
 
   return {
     page,
     size,
-    filters: filters,
+    filters: filters ?? ({} as T),
   };
 };

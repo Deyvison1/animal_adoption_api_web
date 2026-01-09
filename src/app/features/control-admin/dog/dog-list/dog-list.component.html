@@ -1,4 +1,7 @@
-<app-dog-filter (searchEvent)="search($event)" (clearEvent)="clear()"></app-dog-filter>
+<app-dog-filter
+  (searchEvent)="search($event)"
+  (clearEvent)="clear()"
+></app-dog-filter>
 
 <p-card>
   <h2>Lista de Cachorros</h2>
@@ -25,7 +28,7 @@
         <th id="createdDate">Data Da Criação</th>
         <th id="lastModifiedDate">Data da ultima modificação</th>
         <th id="contacts">Contatos</th>
-        <th id="available">Disponivel?</th>
+        <th id="available">Disponivel | Publicado?</th>
         <th id="actions">Ações</th>
       </tr>
     </ng-template>
@@ -57,14 +60,18 @@
         </td>
         <td>
           @if(dog.available) {
-          <p-button icon="pi pi-check" severity="success" size="small" />
+          <p-button pTooltip="Disponivel" icon="pi pi-check" severity="success" size="small" />
           } @else {
-          <p-button icon="pi pi-times" severity="danger" size="small" />
+          <p-button pTooltip="Indisponivel" icon="pi pi-times" severity="danger" size="small" />
+          } @if(dog.published) {
+          <p-button pTooltip="Publicado" icon="pi pi-eye" severity="success" size="small" />
+          } @else {
+          <p-button pTooltip="Não publicado" icon="pi pi-eye-slash" severity="danger" size="small" />
           }
         </td>
         <td>
           <p-buttongroup>
-             <p-button
+            <p-button
               [appAuthRole]="rolesAdminRead"
               icon="pi pi-eye"
               severity="secondary"
