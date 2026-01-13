@@ -60,13 +60,33 @@
         </td>
         <td>
           @if(dog.available) {
-          <p-button pTooltip="Disponivel" icon="pi pi-check" severity="success" size="small" />
+          <p-button
+            pTooltip="Disponivel"
+            icon="pi pi-check"
+            severity="success"
+            size="small"
+          />
           } @else {
-          <p-button pTooltip="Indisponivel" icon="pi pi-times" severity="danger" size="small" />
+          <p-button
+            pTooltip="Indisponivel"
+            icon="pi pi-times"
+            severity="danger"
+            size="small"
+          />
           } @if(dog.published) {
-          <p-button pTooltip="Publicado" icon="pi pi-eye" severity="success" size="small" />
+          <p-button
+            pTooltip="Publicado"
+            icon="pi pi-eye"
+            severity="success"
+            size="small"
+          />
           } @else {
-          <p-button pTooltip="Não publicado" icon="pi pi-eye-slash" severity="danger" size="small" />
+          <p-button
+            pTooltip="Não publicado"
+            icon="pi pi-eye-slash"
+            severity="danger"
+            size="small"
+          />
           }
         </td>
         <td>
@@ -85,6 +105,7 @@
               size="small"
               (onClick)="navigationToEdit(dog.id)"
             />
+            @if(!dog.published) {
             <p-button
               [appAuthRole]="rolesAdmin"
               icon="pi pi-times"
@@ -92,6 +113,7 @@
               severity="danger"
               (onClick)="confirm(dog.id, dog.name)"
             />
+            }
           </p-buttongroup>
         </td>
       </tr>
