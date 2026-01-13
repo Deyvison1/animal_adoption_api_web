@@ -3,4 +3,5 @@ export interface DogUpdateDTO {
   age: number;
   breedId: string;
   available: boolean;
+  description: string;
 }

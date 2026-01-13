@@ -160,6 +160,7 @@ export class DogFormComponent implements OnInit {
     this.router.navigate(['admin/dog', 'form', id]);
   }
 
+
   private update(dto: DogUpdateDTO) {
     this.dogService.update(this.id, dto).subscribe({
       next: (resp: DogDTO) => {
@@ -172,6 +173,18 @@ export class DogFormComponent implements OnInit {
         this.toastrService.showErro(this.operationMessages.ERRO, 'Erro');
       },
     });
+  }
+
+  updateAvaliable() {
+    const avaliable = this.form.get('available')?.value;
+    const published = this.form.get('published')?.value;
+    if(!avaliable && published) {
+      this.toastrService.showWarn(
+        this.operationMessages.ATENCION,
+        'Cachorro não pode estar publicado se não estiver disponível. Caso prossiga, o cachorro será despublicado.'
+      );
+      this.form.patchValue({ published: false });
+    }
   }
 
   private initForm() {

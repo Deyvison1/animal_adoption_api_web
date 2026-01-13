@@ -60,6 +60,7 @@
           formControlName="available"
           binary="true"
           inputId="ny"
+          (onChange)="updateAvaliable()"
         ></p-checkbox>
         <label for="ny" class="ml-2">Disponível?</label>
         <app-erro [control]="form.get('available')"></app-erro>
