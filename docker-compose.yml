@@ -1,4 +1,3 @@
-version: "3.9"
 
 services:
   angular-app:
@@ -9,7 +8,9 @@ services:
       - "80:80"
       - "443:443"
     networks:
-      - controlimage_network
+      controlimage_network:
+        aliases:
+          - image_api
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt:ro  # monta certificados do host
 
