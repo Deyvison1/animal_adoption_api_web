@@ -234,7 +234,7 @@
       </ng-template>
     </p-galleria>
   </form>
-  @if (!isViewMode) {
+  @if (!isViewMode && id) {
     <div class="status-warning">
       <i class="pi pi-info-circle"></i>
       <span class="ml-3">{{ statusWarningMessage }}</span>
