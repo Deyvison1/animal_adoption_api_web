@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   angular-app:
     build: .
@@ -8,6 +10,8 @@ services:
       - "443:443"
     networks:
       - controlimage_network
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro  # monta certificados do host
 
 networks:
   controlimage_network:
