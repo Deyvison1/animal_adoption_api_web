@@ -3,10 +3,10 @@ export const environment = {
   apiUrl: 'http://localhost:8081/api',
   apiUrlPublic: 'http://localhost:8081/public',
   keycloakConfig: {
-    url: 'https://keycloak.barbershop-app.shop:8443',
+    url: 'https://keycloak.animal-adoption.com.br:8443',
     realm: 'ANIMAL_ADOPTION',
     clientId: 'ANIMAL_ADOPTION_CLIENT',
     urlAccount:
-      'https://keycloak.barbershop-app.shop:8443/realms/ANIMAL_ADOPTION/account/',
+      'https://keycloak.animal-adoption.com.br:8443/realms/ANIMAL_ADOPTION/account/',
   },
 };
