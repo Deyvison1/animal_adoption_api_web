@@ -13,7 +13,7 @@
             formControlName="name"
             [ngClass]="{
               'ng-invalid ng-dirty':
-                form.get('name')?.invalid && form.get('name')?.touched
+                form.get('name')?.invalid && form.get('name')?.touched,
             }"
             fluid
             maxlength="50"
@@ -68,22 +68,26 @@
     </div>
 
     <div class="formgrid grid">
-      @if(id) {
-      <div class="field col-12 md:col-3 lg:col-4">
-        <p-fileupload
-          chooseLabel="Escolher arquivo"
-          uploadLabel="Upload do corte."
-          cancelLabel="Cancelar"
-          pSize="small"
-          mode="basic"
-          chooseIcon="pi pi-upload"
-          accept="image/*"
-          maxFileSize="1000000"
-          chooseLabel="Browse"
-          (onSelect)="onFileSelected($event)"
-          [disabled]="isViewMode"
-        />
-      </div>
+      @if (id) {
+        <div class="field col-12 md:col-3 lg:col-4">
+          <p-fileupload
+            chooseLabel="Escolher arquivo"
+            uploadLabel="Upload do corte."
+            cancelLabel="Cancelar"
+            pSize="small"
+            mode="basic"
+            chooseIcon="pi pi-upload"
+            accept="image/*"
+            maxFileSize="1000000"
+            chooseLabel="Browse"
+            (onSelect)="onFileSelected($event)"
+            [disabled]="
+              isViewMode ||
+              form.get('status')?.value === statusAnimal.PUBLISHED ||
+              form.get('status')?.value === statusAnimal.REPUBLISHED
+            "
+          />
+        </div>
       }
       <div div class="field col-12 md:col-3 lg:col-4">
         <p-floatlabel variant="on">
@@ -97,7 +101,7 @@
             style="resize: none"
             class="h-full"
             [ngClass]="{
-              'ng-invalid ng-dirty': form.controls['description'].invalid
+              'ng-invalid ng-dirty': form.controls['description'].invalid,
             }"
             maxlength="255"
             minlength="10"
@@ -109,32 +113,43 @@
       </div>
 
       <div class="field col-12 md:col-3 lg:col-2 flex align-items-center">
-        @if(!isViewMode && form.get('available')?.value === true &&
-        form.get('published')?.value === false) {
-        <p-button
-          [appAuthRole]="rolesAdminPublished"
-          label="Publicar"
-          (onClick)="publishDog()"
-          icon="pi pi-eye"
-          [disabled]="
-            isViewMode || !id || form.get('published')?.value === true
-          "
-        >
-        </p-button>
-        } @else if(!isViewMode && form.get('available')?.value === true &&
-        form.get('published')?.value === true) {
-        <p-button
-          [appAuthRole]="rolesAdminPublished"
-          label="Despublicar"
-          (onClick)="unpublishDog()"
-          icon="pi pi-eye-slash"
-          severity="danger"
-          [disabled]="
-            isViewMode || !id || form.get('published')?.value === false
-          "
-        >
-        </p-button>
-
+        @if (
+          (!isViewMode &&
+            form.get("available")?.value === true &&
+            form.get("status")?.value === statusAnimal.NOT_PUBLISHED) ||
+          form.get("status")?.value === statusAnimal.DESPUBLICADO
+        ) {
+          <p-button
+            [appAuthRole]="rolesAdminPublished"
+            label="Publicar"
+            (onClick)="publishDog()"
+            icon="pi pi-eye"
+            [disabled]="
+              isViewMode ||
+              !id ||
+              form.get('status')?.value == !statusAnimal.NOT_PUBLISHED ||
+              form.get('status')?.value == !statusAnimal.DESPUBLICADO
+            "
+          >
+          </p-button>
+        } @else if (
+          !isViewMode &&
+          form.get("available")?.value === true &&
+          form.get("status")?.value === statusAnimal.PUBLISHED
+        ) {
+          <p-button
+            [appAuthRole]="rolesAdminPublished"
+            label="Despublicar"
+            (onClick)="unpublishDog()"
+            icon="pi pi-eye-slash"
+            severity="danger"
+            [disabled]="
+              isViewMode ||
+              !id ||
+              form.get('status')?.value != statusAnimal.PUBLISHED
+            "
+          >
+          </p-button>
         }
       </div>
     </div>
@@ -143,14 +158,25 @@
       <app-contact
         [form]="contactsFormArray"
         [isViewMode]="isViewMode"
+        [isUpdated]="
+          form.get('status')?.value === statusAnimal.REPUBLISHED ||
+          form.get('status')?.value === statusAnimal.PUBLISHED
+        "
       ></app-contact>
     </div>
 
-    @if(!isViewMode) {
-    <!-- Botão -->
-    <div class="flex justify-content-end mt-4">
-      <p-button label="Salvar" (onClick)="save()"></p-button>
-    </div>
+    @if (!isViewMode) {
+      <!-- Botão -->
+      <div class="flex justify-content-end mt-4">
+        <p-button
+          label="Salvar"
+          (onClick)="save()"
+          [disabled]="
+            form.get('status')?.value === statusAnimal.REPUBLISHED ||
+            form.get('status')?.value === statusAnimal.PUBLISHED
+          "
+        ></p-button>
+      </div>
     }
 
     <p-galleria
@@ -170,7 +196,7 @@
           class="galery"
           [ngStyle]="{
             border: item?.active ? '3px solid #2196f3' : '1px solid #ccc',
-            boxShadow: item?.active ? '0 0 8px rgba(33,150,243,0.5)' : 'none'
+            boxShadow: item?.active ? '0 0 8px rgba(33,150,243,0.5)' : 'none',
           }"
         >
           <img
@@ -178,29 +204,39 @@
             alt="{{ item?.filename }}"
             class="img"
           />
+          @if (
+            !isViewMode &&
+            form.get("status")?.value !== statusAnimal.PUBLISHED &&
+            form.get("status")?.value !== statusAnimal.REPUBLISHED
+          ) {
+            <div class="icon-active" (click)="setActiveImage(item)">
+              <i
+                class="pi"
+                [ngClass]="item?.active ? 'pi-check-circle' : 'pi-circle'"
+                style="font-size: 1.2rem; color: #2196f3"
+              ></i>
+            </div>
 
-          @if(!isViewMode) {
-          <div class="icon-active" (click)="setActiveImage(item)">
-            <i
-              class="pi"
-              [ngClass]="item?.active ? 'pi-check-circle' : 'pi-circle'"
-              style="font-size: 1.2rem; color: #2196f3"
-            ></i>
-          </div>
-          <!-- Botão de remover -->
-          <div class="btn-remove">
-            <p-button
-              [appAuthRole]="rolesAdmin"
-              icon="pi pi-times"
-              severity="danger"
-              [rounded]="true"
-              (onClick)="removeImage(item)"
-              [disabled]="item?.active"
-            ></p-button>
-          </div>
+            <!-- Botão de remover -->
+            <div class="btn-remove">
+              <p-button
+                [appAuthRole]="rolesAdmin"
+                icon="pi pi-times"
+                severity="danger"
+                [rounded]="true"
+                (onClick)="removeImage(item)"
+                [disabled]="item?.active"
+              ></p-button>
+            </div>
           }
         </div>
       </ng-template>
     </p-galleria>
   </form>
+  @if (statusWarningMessage) {
+    <div class="status-warning">
+      <i class="pi pi-info-circle"></i>
+      <span class="ml-3">{{ statusWarningMessage }}</span>
+    </div>
+  }
 </p-card>

@@ -13,6 +13,7 @@ import { ContactViewComponent } from '../contact-view/contact-view.component';
 import { DogFilterComponent } from '../../../shared/components/dog-filter/dog-filter.component';
 import { DogFilterDTO } from '../../../shared/model/dog-filter.dto';
 import { ToastrService } from '../../../core/services/toastr.service';
+import { STATUS_ANIMAL_META, StatusAnimal } from '../../../shared/model/status-animal.enum';
 
 @Component({
   selector: 'app-dog-list',
@@ -36,6 +37,7 @@ export class DogListComponent implements OnInit {
   pageConfig: PageConfigDTO<any> = pageConfig;
   loading = true;
   allLoaded = false;
+  StatusAnimal = StatusAnimal;
 
   ngOnInit(): void {
     this.loadDogs();
@@ -48,7 +50,7 @@ export class DogListComponent implements OnInit {
     this.allLoaded = false;
     this.loadDogs();
   }
-
+  
   getDogImages(dog: DogDTO) {
     if (!dog.imagesComplet) return [];
 
@@ -99,4 +101,9 @@ export class DogListComponent implements OnInit {
       },
     });
   }
+
+  getStatusLabel(status: StatusAnimal): string {
+    return STATUS_ANIMAL_META[status]?.name ?? status;
+  }
+
 }

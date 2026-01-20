@@ -1,65 +1,99 @@
 <div>
-  <app-dog-filter (searchEvent)="search($event)" (clearEvent)="clear()"></app-dog-filter>
+  <app-dog-filter
+    (searchEvent)="search($event)"
+    (clearEvent)="clear()"
+  ></app-dog-filter>
 </div>
 
 <div class="dog-list-wrapper" (scroll)="onScroll($event)">
   <div class="dog-list">
-    @if(dogs.length) { @for (dog of dogs; track dog.id) {
 
-    <p-card class="dog-card">
-      <div class="dog-card-content">
-        <!-- IMAGENS -->
-        <div class="dog-image-wrapper">
-          <p-carousel
-            [value]="getDogImages(dog)"
-            [numVisible]="1"
-            [numScroll]="1"
-            [circular]="false"
-            [showIndicators]="true"
-            [showNavigators]="dog.images?.length > 1"
-            styleClass="dog-carousel"
-          >
-            <ng-template pTemplate="item" let-img>
-              <img
-                [src]="img.url"
-                [alt]="dog.name"
-                class="carousel-img"
-              />
-            </ng-template>
-          </p-carousel>
-        </div>
+    @if (dogs.length) {
+      @for (dog of dogs; track dog.id) {
 
-        <!-- INFO -->
-        <div class="dog-info">
-          <h3>{{ dog.name }} - {{ dog.breed.name }}</h3>
-          <p>{{ dog.description }}</p>
+        <p-card
+          class="dog-card"
+          [class.republished-card]="dog.status === StatusAnimal.REPUBLISHED"
+        >
 
-          @if(dog.age) {
-          <p><strong>Idade:</strong> {{ dog.age }} anos</p>
-          } @if(dog.breed.nationality) {
-          <p><strong>Nacionalidade:</strong> {{ dog.breed.nationality }}</p>
+          <!-- 🔴 BANNER DE STATUS -->
+          @if (dog.status === StatusAnimal.REPUBLISHED) {
+            <div class="status-banner republished">
+              <i class="pi pi-refresh"></i>
+              <strong>{{ getStatusLabel(dog.status) }}</strong>
+            </div>
           }
-        </div>
-      </div>
 
-      <ng-template pTemplate="footer">
-        <div class="p-3 d-flex justify-content-end">
-          <button
-            pButton
-            type="button"
-            label="Ver contatos"
-            icon="pi pi-users"
-            (click)="contactPreview.open(dog.contacts)"
-          ></button>
-        </div>
-      </ng-template>
-    </p-card>
-    <app-contact-view
-      #contactPreview
-      [contacts]="dog.contacts"
-    ></app-contact-view>
-    } } @else {
-    <p class="no-dogs-message">Nenhum cachorro encontrado.</p>
+          <!-- 🔒 CONTEÚDO -->
+          <div
+            class="dog-card-content"
+            [class.dog-disabled]="dog.status === StatusAnimal.REPUBLISHED"
+            [class.pointer-disabled]="dog.status === StatusAnimal.REPUBLISHED"
+          >
+            <!-- IMAGENS -->
+            <div class="dog-image-wrapper">
+              <p-carousel
+                [value]="getDogImages(dog)"
+                [numVisible]="1"
+                [numScroll]="1"
+                [circular]="false"
+                [showIndicators]="true"
+                [showNavigators]="dog.images?.length > 1"
+                styleClass="dog-carousel"
+              >
+                <ng-template pTemplate="item" let-img>
+                  <img
+                    [src]="img.url"
+                    [alt]="dog.name"
+                    class="carousel-img"
+                  />
+                </ng-template>
+              </p-carousel>
+            </div>
+
+            <!-- INFO -->
+            <div class="dog-info">
+              <h3>{{ dog.name }} - {{ dog.breed.name }}</h3>
+              <p>{{ dog.description }}</p>
+
+              @if (dog.age) {
+                <p><strong>Idade:</strong> {{ dog.age }} anos</p>
+              }
+
+              @if (dog.breed.nationality) {
+                <p>
+                  <strong>Nacionalidade:</strong>
+                  {{ dog.breed.nationality }}
+                </p>
+              }
+            </div>
+          </div>
+
+          <ng-template pTemplate="footer">
+            <div class="p-3 d-flex justify-content-end">
+              <button
+                pButton
+                label="Ver contatos"
+                icon="pi pi-users"
+                [disabled]="dog.status === StatusAnimal.REPUBLISHED"
+                pTooltip="Animal em processo de republicação"
+                tooltipPosition="top"
+                (click)="contactPreview.open(dog.contacts)"
+              ></button>
+            </div>
+          </ng-template>
+
+        </p-card>
+
+        <app-contact-view
+          #contactPreview
+          [contacts]="dog.contacts"
+        ></app-contact-view>
+
+      }
+    } @else {
+      <p class="no-dogs-message">Nenhum cachorro encontrado.</p>
     }
+
   </div>
 </div>

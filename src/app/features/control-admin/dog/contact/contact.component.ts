@@ -45,6 +45,7 @@ export class ContactComponent implements OnInit {
   types = types;
   isEmail: boolean = false;
   isViewMode = input.required<boolean>();
+  isUpdated = input.required<boolean>();
 
   get contacts(): FormArray<FormGroup> {
     return this.form();

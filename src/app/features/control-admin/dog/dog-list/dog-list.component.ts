@@ -21,6 +21,7 @@ import { AuthRoleDirective } from '../../../../shared/directives/auth-role.direc
 import { DogFilterComponent } from '../../../../shared/components/dog-filter/dog-filter.component';
 import { DogFilterDTO } from '../../../../shared/model/dog-filter.dto';
 import { AnimalImageDTO } from '../../../../shared/model/animal-image.dto';
+import { StatusAnimal } from '../../../../shared/model/status-animal.enum';
 
 @Component({
   selector: 'app-dog-list',
@@ -52,6 +53,7 @@ export class DogListComponent {
 
   pageConfig = pageConfig;
   operationMessages = operationMessages;
+  statusAnimal = StatusAnimal;
   dogs: DogDTO[] = [];
   totalRecords = 0;
   showTable: boolean = false;
@@ -120,7 +122,7 @@ export class DogListComponent {
       next: () => {
         this.toastrService.showSucess(
           this.operationMessages.SUCCESS,
-          'Tipo deletado com sucesso'
+          'Cachorro deltado com sucesso.'
         );
         this.loadData(this.pageConfig);
       },

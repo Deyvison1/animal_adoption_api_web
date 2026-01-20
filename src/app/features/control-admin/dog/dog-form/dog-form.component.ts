@@ -39,6 +39,7 @@ import { ContactComponent } from '../contact/contact.component';
 import { emailOrPhoneValidator } from '../../../../shared/validators/email-or-phone.validator';
 import { AuthRoleDirective } from '../../../../shared/directives/auth-role.directive';
 import { publish } from 'rxjs';
+import { StatusAnimal } from '../../../../shared/model/status-animal.enum';
 
 @Component({
   selector: 'app-dog-form',
@@ -77,6 +78,7 @@ export class DogFormComponent implements OnInit {
   private readonly router: Router = inject(Router);
   readonly rolesAdmin: string[] = ['ADMIN'];
   readonly rolesAdminPublished: string[] = ['ADMIN_PUBLISH'];
+  statusAnimal = StatusAnimal;
 
   private readonly operationMessages = operationMessages;
   id: string;
@@ -146,7 +148,7 @@ export class DogFormComponent implements OnInit {
       next: (resp: DogDTO) => {
         this.toastrService.showSucess(
           this.operationMessages.SUCCESS,
-          'Tipo adicionado com sucesso.'
+          'Tipo adicionado com sucesso.',
         );
         this.navigationToEdit(resp.id);
       },
@@ -160,13 +162,12 @@ export class DogFormComponent implements OnInit {
     this.router.navigate(['admin/dog', 'form', id]);
   }
 
-
   private update(dto: DogUpdateDTO) {
     this.dogService.update(this.id, dto).subscribe({
       next: (resp: DogDTO) => {
         this.toastrService.showSucess(
           this.operationMessages.SUCCESS,
-          'Tipo atualizado com sucesso.'
+          'Tipo atualizado com sucesso.',
         );
       },
       error: (err) => {
@@ -178,10 +179,10 @@ export class DogFormComponent implements OnInit {
   updateAvaliable() {
     const avaliable = this.form.get('available')?.value;
     const published = this.form.get('published')?.value;
-    if(!avaliable && published) {
+    if (!avaliable && published) {
       this.toastrService.showWarn(
         this.operationMessages.ATENCION,
-        'Cachorro não pode estar publicado se não estiver disponível. Caso prossiga, o cachorro será despublicado.'
+        'Cachorro não pode estar publicado se não estiver disponível. Caso prossiga, o cachorro será despublicado.',
       );
       this.form.patchValue({ published: false });
     }
@@ -199,22 +200,35 @@ export class DogFormComponent implements OnInit {
       contacts: this.fb.array([]),
       activeImage: [''],
       published: [],
+      status: [],
     });
   }
 
   publishDog(): void {
     this.dogService.isPublish(this.id).subscribe({
       next: () => {
+        let status: StatusAnimal = StatusAnimal.NOT_PUBLISHED;
+        let msg = '';
+        if (this.form.get('status').value === this.statusAnimal.DESPUBLICADO) {
+          status = StatusAnimal.REPUBLISHED;
+          msg = 'Cachorro publicado com sucesso';
+        } else if (
+          this.form.get('status').value === this.statusAnimal.NOT_PUBLISHED
+        ) {          
+          status = StatusAnimal.PUBLISHED;
+          msg = 'Cachorro republicado com sucesso, aguarde 10 minutos para ter sucesso na publicação.';
+        }
+        this.form.patchValue({ status: status });
+        this.form.disable();
         this.toastrService.showSucess(
           this.operationMessages.SUCCESS,
-          'Cachorro publicado com sucesso.'
+          msg,
         );
-        this.form.patchValue({ published: true });
       },
       error: (err) =>
         this.toastrService.showErro(
           this.operationMessages.ERRO,
-          err.error?.message
+          err.error?.message,
         ),
     });
   }
@@ -224,14 +238,15 @@ export class DogFormComponent implements OnInit {
       next: () => {
         this.toastrService.showSucess(
           this.operationMessages.SUCCESS,
-          'Cachorro despublicado com sucesso.'
+          'Cachorro despublicado com sucesso.',
         );
-        this.form.patchValue({ published: false });
+        this.form.patchValue({ status: this.statusAnimal.DESPUBLICADO });
+        this.form.enable();
       },
       error: (err) =>
         this.toastrService.showErro(
           this.operationMessages.ERRO,
-          err.error?.message
+          err.error?.message,
         ),
     });
   }
@@ -260,6 +275,7 @@ export class DogFormComponent implements OnInit {
           available: resp.available,
           description: resp.description,
           published: resp.published,
+          status: resp.status,
         });
 
         // Preenche o FormArray de contatos
@@ -278,14 +294,33 @@ export class DogFormComponent implements OnInit {
                 { value: contact.value || '', disabled: this.isViewMode },
                 [Validators.required, emailOrPhoneValidator()],
               ],
-            })
+            }),
           );
         });
+        if (
+          this.form.get('status')?.value === StatusAnimal.REPUBLISHED ||
+          this.form.get('status')?.value === StatusAnimal.PUBLISHED
+        ) {
+          this.form.disable();
+        }
       },
       error: (err) => {
         this.toastrService.showErro(this.operationMessages.ERRO, 'Erro');
       },
     });
+  }
+
+  get statusWarningMessage(): string | null {
+    switch (this.form.get('status')?.value) {
+      case StatusAnimal.PUBLISHED:
+        return 'Este animal está publicado. Para alterar qualquer informação, é necessário despublicar primeiro.';
+
+      case StatusAnimal.REPUBLISHED:
+        return 'Este animal está em processo de republicação. Aguarde a publicação para poder despublicar ou alterar.';
+
+      default:
+        return null;
+    }
   }
 
   private checkIfUpdate(): void {
@@ -301,7 +336,7 @@ export class DogFormComponent implements OnInit {
       });
     }
     this.isViewMode = this.route.snapshot.url.some(
-      (segment) => segment.path === 'view'
+      (segment) => segment.path === 'view',
     );
 
     if (this.isViewMode) {
@@ -312,7 +347,7 @@ export class DogFormComponent implements OnInit {
 
   setActiveImage(item: AnimalImageDTO): void {
     this.images.update((imgs) =>
-      imgs.map((img) => ({ ...img, active: img.filename === item.filename }))
+      imgs.map((img) => ({ ...img, active: img.filename === item.filename })),
     );
     this.form.patchValue({ activeImage: item.filename });
     this.activateImage(item.id);
@@ -322,20 +357,20 @@ export class DogFormComponent implements OnInit {
     this.animalImageService
       .activateImage(
         id,
-        this.imagesArray.map((img) => img.id)
+        this.imagesArray.map((img) => img.id),
       )
       .subscribe({
         next: () => {
           this.activeIndex.set(this.imagesArray.findIndex((x) => x.id === id));
           this.toastrService.showSucess(
             this.operationMessages.SUCCESS,
-            'A imagem foi definida como ativa.'
+            'A imagem foi definida como ativa.',
           );
         },
         error: (err) =>
           this.toastrService.showErro(
             this.operationMessages.ERRO,
-            err.error?.message
+            err.error?.message,
           ),
       });
   }
@@ -344,7 +379,7 @@ export class DogFormComponent implements OnInit {
     if (item.active) {
       this.toastrService.showWarn(
         this.operationMessages.ERRO,
-        'Não é possível excluir a imagem ativa.'
+        'Não é possível excluir a imagem ativa.',
       );
       return;
     }
@@ -355,7 +390,7 @@ export class DogFormComponent implements OnInit {
           const filtered = imgs.filter((img) => img?.id !== item?.id);
 
           const hadActiveRemoved = imgs.find(
-            (img) => img.id === item.id
+            (img) => img.id === item.id,
           )?.active;
           if (hadActiveRemoved && filtered.length > 0) {
             filtered[0] = { ...filtered[0], active: true };
@@ -366,13 +401,13 @@ export class DogFormComponent implements OnInit {
         });
         this.toastrService.showSucess(
           this.operationMessages.SUCCESS,
-          'Imagem removida.'
+          'Imagem removida.',
         );
       },
       error: (err) =>
         this.toastrService.showErro(
           this.operationMessages.ERRO,
-          err.error?.message
+          err.error?.message,
         ),
     });
   }
@@ -407,19 +442,19 @@ export class DogFormComponent implements OnInit {
 
         this.toastrService.showSucess(
           this.operationMessages.SUCCESS,
-          'Imagem enviada.'
+          'Imagem enviada.',
         );
       },
       error: (err: HttpErrorResponse) => {
         if (err.status === 409) {
           this.toastrService.showWarn(
             this.operationMessages.ERRO,
-            err.error?.message
+            err.error?.message,
           );
         } else {
           this.toastrService.showErro(
             this.operationMessages.ERRO,
-            err.error?.message
+            err.error?.message,
           );
         }
       },

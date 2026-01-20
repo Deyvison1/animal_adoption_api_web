@@ -73,17 +73,32 @@
             severity="danger"
             size="small"
           />
-          } @if(dog.published) {
+          } @if(dog.status === statusAnimal.PUBLISHED) {
           <p-button
             pTooltip="Publicado"
             icon="pi pi-eye"
             severity="success"
             size="small"
           />
-          } @else {
+          } @else if(dog.status === statusAnimal.NOT_PUBLISHED) {
           <p-button
             pTooltip="Não publicado"
             icon="pi pi-eye-slash"
+            severity="danger"
+            size="small"
+          />
+          } @else if(dog.status === statusAnimal.REPUBLISHED) {
+          <p-button
+            pTooltip="Republicando"
+            icon="pi pi-refresh"
+            severity="info"
+            size="small"
+          />
+          }
+          @else if(dog.status === statusAnimal.DESPUBLICADO) {
+          <p-button
+            pTooltip="Despublicado, por algum motivo."
+            icon="pi pi-times"
             severity="danger"
             size="small"
           />
@@ -105,7 +120,7 @@
               size="small"
               (onClick)="navigationToEdit(dog.id)"
             />
-            @if(!dog.published) {
+            @if(dog.status != statusAnimal.PUBLISHED && dog.status != statusAnimal.REPUBLISHED) {
             <p-button
               [appAuthRole]="rolesAdmin"
               icon="pi pi-times"
