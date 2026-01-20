@@ -140,7 +140,7 @@
           <p-button
             [appAuthRole]="rolesAdminPublished"
             label="Despublicar"
-            (onClick)="unpublishDog()"
+            (onClick)="modalMotivo.open();"
             icon="pi pi-eye-slash"
             severity="danger"
             [disabled]="
@@ -150,6 +150,7 @@
             "
           >
           </p-button>
+          <app-modal-motivo-not-published #modalMotivo (despublicaAnimal)="unpublishDog($event)"></app-modal-motivo-not-published>
         }
       </div>
     </div>

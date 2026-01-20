@@ -1,0 +1,44 @@
+<p-dialog
+  [(visible)]="visible"
+  modal="true"
+  header="Motivo da despublicação do animal"
+  [style]="{ width: '450px', height: '350px' }"
+  [baseZIndex]="10000"
+>
+  <div class="dialog-content" style="display: flex; flex-direction: column; height: 100%;">
+    <!-- Campo de texto ocupa todo o espaço disponível -->
+    <div class="flex-grow-1" style="flex: 1; display: flex; flex-direction: column;">
+      <p-floatlabel style="flex: 1;" variant="on">
+        <textarea
+          pInputTextarea
+          id="over_label"
+          [formControl]="motivoForm"
+          style="flex: 1; resize: none; width: 100%; height: 100%;"
+          [ngClass]="{ 'ng-invalid ng-dirty': motivoForm.invalid }"
+          maxlength="255"
+          minlength="10"
+        ></textarea>
+        <label for="over_label">Descrição</label>
+      </p-floatlabel>
+      <app-erro [control]="motivoForm"></app-erro>
+    </div>
+
+    <!-- Botões fixos na parte inferior -->
+    <div class="flex justify-end mt-2">
+      <p-button
+        label="Cancelar"
+        icon="pi pi-times"
+        class="p-button-text"
+        (onClick)="visible = false"
+      ></p-button>
+
+      <p-button
+        label="Despublicar"
+        icon="pi pi-check"
+        class="ml-2"
+        [disabled]="motivoForm.invalid"
+        (onClick)="despublicarAnimal()"
+      ></p-button>
+    </div>
+  </div>
+</p-dialog>

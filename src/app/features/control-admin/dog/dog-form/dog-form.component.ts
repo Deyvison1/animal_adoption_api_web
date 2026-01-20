@@ -38,8 +38,8 @@ import { TextareaModule } from 'primeng/textarea';
 import { ContactComponent } from '../contact/contact.component';
 import { emailOrPhoneValidator } from '../../../../shared/validators/email-or-phone.validator';
 import { AuthRoleDirective } from '../../../../shared/directives/auth-role.directive';
-import { publish } from 'rxjs';
 import { StatusAnimal } from '../../../../shared/model/status-animal.enum';
+import { ModalMotivoNotPublishedComponent } from '../../../../shared/components/modal-motivo-not-published/modal-motivo-not-published.component';
 
 @Component({
   selector: 'app-dog-form',
@@ -61,6 +61,7 @@ import { StatusAnimal } from '../../../../shared/model/status-animal.enum';
     TextareaModule,
     ContactComponent,
     AuthRoleDirective,
+    ModalMotivoNotPublishedComponent,
   ],
   templateUrl: './dog-form.component.html',
   styleUrl: './dog-form.component.scss',
@@ -214,16 +215,14 @@ export class DogFormComponent implements OnInit {
           msg = 'Cachorro publicado com sucesso';
         } else if (
           this.form.get('status').value === this.statusAnimal.NOT_PUBLISHED
-        ) {          
+        ) {
           status = StatusAnimal.PUBLISHED;
-          msg = 'Cachorro republicado com sucesso, aguarde 10 minutos para ter sucesso na publicação.';
+          msg =
+            'Cachorro republicado com sucesso, aguarde 10 minutos para ter sucesso na publicação.';
         }
         this.form.patchValue({ status: status });
         this.form.disable();
-        this.toastrService.showSucess(
-          this.operationMessages.SUCCESS,
-          msg,
-        );
+        this.toastrService.showSucess(this.operationMessages.SUCCESS, msg);
       },
       error: (err) =>
         this.toastrService.showErro(
@@ -233,8 +232,8 @@ export class DogFormComponent implements OnInit {
     });
   }
 
-  unpublishDog(): void {
-    this.dogService.notPublish(this.id).subscribe({
+  unpublishDog(motivo: string): void {
+    this.dogService.notPublish(this.id, motivo).subscribe({
       next: () => {
         this.toastrService.showSucess(
           this.operationMessages.SUCCESS,
@@ -244,8 +243,8 @@ export class DogFormComponent implements OnInit {
         this.form.enable();
       },
       error: (err) =>
-        this.toastrService.showErro(
-          this.operationMessages.ERRO,
+        this.toastrService.showWarn(
+          this.operationMessages.ATENCION,
           err.error?.message,
         ),
     });

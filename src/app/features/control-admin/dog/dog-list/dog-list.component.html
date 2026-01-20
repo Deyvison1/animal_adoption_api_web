@@ -97,7 +97,7 @@
           }
           @else if(dog.status === statusAnimal.DESPUBLICADO) {
           <p-button
-            pTooltip="Despublicado, por algum motivo."
+            [pTooltip]="dog.motivo"
             icon="pi pi-times"
             severity="danger"
             size="small"

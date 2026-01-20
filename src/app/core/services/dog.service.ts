@@ -15,7 +15,9 @@ import { DogFilterDTO } from '../../shared/model/dog-filter.dto';
 export class DogService extends HttpService {
   private readonly url: string = environment.apiUrl.concat('/dog');
 
-  findAll(pageConfig: PageConfigDTO<DogFilterDTO>): Observable<PageDTO<DogDTO[]>> {
+  findAll(
+    pageConfig: PageConfigDTO<DogFilterDTO>,
+  ): Observable<PageDTO<DogDTO[]>> {
     const params = buildPaginationParams(pageConfig);
     return this.http.get<PageDTO<DogDTO[]>>(`${this.url}`, { params });
   }
@@ -40,7 +42,8 @@ export class DogService extends HttpService {
     return this.http.get<void>(`${this.url}/is-publish/${id}`);
   }
 
-  notPublish(id: string): Observable<void> {
-    return this.http.get<void>(`${this.url}/not-publish/${id}`);
+  notPublish(id: string, motivo: string): Observable<void> {
+    const params = { motivo };
+    return this.http.get<void>(`${this.url}/not-publish/${id}`, { params });
   }
 }
