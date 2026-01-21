@@ -317,6 +317,10 @@ export class DogFormComponent implements OnInit {
       case StatusAnimal.REPUBLISHED:
         return 'Este animal está em processo de republicação. Aguarde a publicação para poder despublicar ou alterar.';
 
+      case StatusAnimal.DESPUBLICADO:
+      case StatusAnimal.NOT_PUBLISHED:
+        return null;
+
       default:
         return null;
     }

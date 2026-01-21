@@ -234,7 +234,7 @@
       </ng-template>
     </p-galleria>
   </form>
-  @if (!isViewMode && id) {
+  @if (!isViewMode && id && (form.get('status')?.value === statusAnimal.PUBLISHED || form.get('status')?.value === statusAnimal.REPUBLISHED)) {
     <div class="status-warning">
       <i class="pi pi-info-circle"></i>
       <span class="ml-3">{{ statusWarningMessage }}</span>
