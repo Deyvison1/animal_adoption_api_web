@@ -1,0 +1,148 @@
+import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { ConfirmationService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { ButtonGroupModule } from 'primeng/buttongroup';
+import { CardModule } from 'primeng/card';
+import { ConfirmDialog } from 'primeng/confirmdialog';
+import { TableLazyLoadEvent, TableModule } from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
+import { ToastrService } from '../../../../core/services/toastr.service';
+import { Router } from '@angular/router';
+import { CatService } from '../../../../core/services/cat.service';
+import { CatDTO } from '../../../../shared/model/cat.dto';
+import { getPagePrimeng } from '../../../../shared/utils/page-primeng.utils';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ImageModule } from 'primeng/image';
+import { TooltipModule } from 'primeng/tooltip';
+import { AuthRoleDirective } from '../../../../shared/directives/auth-role.directive';
+import { DogFilterComponent } from '../../../../shared/components/dog-filter/dog-filter.component';
+import { DogFilterDTO } from '../../../../shared/model/dog-filter.dto';
+import { AnimalImageDTO } from '../../../../shared/model/animal-image.dto';
+import { StatusAnimal } from '../../../../shared/model/status-animal.enum';
+import { DEFAULT_PAGE_CONFIG, OPERATION_MESSAGES } from '../../../../core/constants';
+
+@Component({
+  selector: 'app-cat-list',
+  standalone: true,
+  imports: [
+    CommonModule,
+    TableModule,
+    ButtonModule,
+    ToastModule,
+    ConfirmDialog,
+    CardModule,
+    ButtonGroupModule,
+    ImageModule,
+    TooltipModule,
+    AuthRoleDirective,
+    DogFilterComponent,
+  ],
+  templateUrl: './cat-list.component.html',
+  styleUrl: './cat-list.component.scss',
+})
+export class CatListComponent {
+  private readonly confirmationService: ConfirmationService =
+    inject(ConfirmationService);
+  private readonly toastrService = inject(ToastrService);
+  private readonly router = inject(Router);
+  private readonly catService: CatService = inject(CatService);
+  readonly rolesAdmin: string[] = ['ADMIN'];
+  readonly rolesAdminRead: string[] = ['ADMIN', 'ADMIN_READ'];
+
+  pageConfig = DEFAULT_PAGE_CONFIG;
+  operationMessages = OPERATION_MESSAGES;
+  statusAnimal = StatusAnimal;
+  cats: CatDTO[] = [];
+  totalRecords = 0;
+  showTable: boolean = false;
+
+  loadData(event: TableLazyLoadEvent) {
+    this.pageConfig = getPagePrimeng(event, this.pageConfig.filters);
+    this.catService.findAll(this.pageConfig).subscribe({
+      next: (resp) => {
+        this.cats = resp.content;
+        this.totalRecords = resp.totalElements;
+      },
+      error: (err: Error) => {
+        this.toastrService.showErro(
+          OPERATION_MESSAGES.ERROR,
+          'Falha ao buscar dados.'
+        );
+      },
+    });
+  }
+
+  getUriImageActive(images: AnimalImageDTO[]): string {
+    const activeImage = images.find((img) => img.active);
+    return activeImage ? activeImage.url : images[0].url;
+  }
+
+  clear() {
+    this.pageConfig.filters = {};
+    this.pageConfig.page = 0;
+    this.cats = [];
+    this.loadData({
+      first: 0,
+      rows: this.pageConfig.size,
+    });
+  }
+
+  confirm(id: string, name: string) {
+    const nameBold = `<strong>${name}</strong>`;
+    this.confirmationService.confirm({
+      message: `A exclusão do ${nameBold} não poderá ser desfeita.`,
+      header: 'Tem certeza que deseja excluir esse gato?',
+      icon: 'pi pi-info-circle',
+      rejectLabel: 'Cancelar',
+      rejectButtonProps: {
+        label: 'Cancelar',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Excluir',
+        severity: 'danger',
+      },
+      accept: () => {
+        this.delete(id);
+      },
+    });
+  }
+
+  search(filter: DogFilterDTO) {
+    this.pageConfig.filters = filter;
+    const page = Math.floor(this.pageConfig.page / this.pageConfig.size);
+    this.loadData({ first: page, rows: this.pageConfig.size });
+  }
+
+  private delete(id: string) {
+    this.catService.delete(id).subscribe({
+      next: () => {
+        this.toastrService.showSucess(
+          this.operationMessages.SUCCESS,
+          'Gato deletado com sucesso.'
+        );
+        this.loadData(this.pageConfig);
+      },
+      error: (err: HttpErrorResponse) => {
+        this.toastrService.showErro(
+          this.operationMessages.ERROR,
+          err.error.message
+        );
+      },
+    });
+  }
+
+  getContactsName(cat: CatDTO) {
+    return cat.contacts.map((x) => x.name).join(', ');
+  }
+
+  navigationToView(id: string) {
+    this.router.navigate(['admin/cat', 'form', id, 'view']);
+  }
+
+  navigationToEdit(id: string) {
+    this.router.navigate(['admin/cat', 'form', id]);
+  }
+}

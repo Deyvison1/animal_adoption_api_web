@@ -23,6 +23,13 @@ export const routes: Routes = [
             (m) => m.DogListComponent
           ),
       },
+      {
+        path: 'cat',
+        loadComponent: () =>
+          import('./features/public/cat-list/cat-list.component').then(
+            (m) => m.CatListComponent
+          ),
+      },
     ],
   },
   {
@@ -79,6 +86,53 @@ export const routes: Routes = [
               import(
                 './features/control-admin/dog/dog-list/dog-list.component'
               ).then((r) => r.DogListComponent),
+            canActivate: [AuthGuard],
+            data: { roles: ['ADMIN', 'ADMIN_READ'] },
+          },
+        ],
+      },
+
+      {
+        path: 'cat',
+        loadComponent: () =>
+          import('./features/control-admin/cat/cat.component').then(
+            (r) => r.CatComponent
+          ),
+        canActivate: [AuthGuard],
+        children: [
+          {
+            path: 'form',
+            loadComponent: () =>
+              import(
+                './features/control-admin/cat/cat-form/cat-form.component'
+              ).then((r) => r.CatFormComponent),
+            canActivate: [AuthGuard],
+            data: { roles: ['ADMIN'] },
+          },
+          {
+            path: 'form/:id',
+            loadComponent: () =>
+              import(
+                './features/control-admin/cat/cat-form/cat-form.component'
+              ).then((r) => r.CatFormComponent),
+            canActivate: [AuthGuard],
+            data: { roles: ['ADMIN'] },
+          },
+          {
+            path: 'form/:id/view',
+            loadComponent: () =>
+              import(
+                './features/control-admin/cat/cat-form/cat-form.component'
+              ).then((r) => r.CatFormComponent),
+            canActivate: [AuthGuard],
+            data: { roles: ['ADMIN', 'ADMIN_READ'] },
+          },
+          {
+            path: 'list',
+            loadComponent: () =>
+              import(
+                './features/control-admin/cat/cat-list/cat-list.component'
+              ).then((r) => r.CatListComponent),
             canActivate: [AuthGuard],
             data: { roles: ['ADMIN', 'ADMIN_READ'] },
           },

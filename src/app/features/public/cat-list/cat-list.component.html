@@ -1,0 +1,99 @@
+<div>
+  <app-dog-filter
+    (searchEvent)="search($event)"
+    (clearEvent)="clear()"
+  ></app-dog-filter>
+</div>
+
+<div class="cat-list-wrapper" (scroll)="onScroll($event)">
+  <div class="cat-list">
+
+    @if (cats.length) {
+      @for (cat of cats; track cat.id) {
+
+        <p-card
+          class="cat-card"
+          [class.republished-card]="cat.status === StatusAnimal.REPUBLISHED"
+        >
+
+          <!-- 🔴 BANNER DE STATUS -->
+          @if (cat.status === StatusAnimal.REPUBLISHED) {
+            <div class="status-banner republished">
+              <i class="pi pi-refresh"></i>
+              <strong>{{ getStatusLabel(cat.status) }}</strong>
+            </div>
+          }
+
+          <!-- 🔒 CONTEÚDO -->
+          <div
+            class="cat-card-content"
+            [class.cat-disabled]="cat.status === StatusAnimal.REPUBLISHED"
+            [class.pointer-disabled]="cat.status === StatusAnimal.REPUBLISHED"
+          >
+            <!-- IMAGENS -->
+            <div class="cat-image-wrapper">
+              <p-carousel
+                [value]="getCatImages(cat)"
+                [numVisible]="1"
+                [numScroll]="1"
+                [circular]="false"
+                [showIndicators]="true"
+                [showNavigators]="cat.images?.length > 1"
+                styleClass="cat-carousel"
+              >
+                <ng-template pTemplate="item" let-img>
+                  <img
+                    [src]="img.url"
+                    [alt]="cat.name"
+                    class="carousel-img"
+                  />
+                </ng-template>
+              </p-carousel>
+            </div>
+
+            <!-- INFO -->
+            <div class="cat-info">
+              <h3>{{ cat.name }} - {{ cat.breed.name }}</h3>
+              <p>{{ cat.description }}</p>
+
+              @if (cat.age) {
+                <p><strong>Idade:</strong> {{ cat.age }} anos</p>
+              }
+
+              @if (cat.breed.nationality) {
+                <p>
+                  <strong>Nacionalidade:</strong>
+                  {{ cat.breed.nationality }}
+                </p>
+              }
+            </div>
+          </div>
+
+          <ng-template pTemplate="footer">
+            <div class="p-3 d-flex justify-content-end">
+              <button
+                pButton
+                label="Ver contatos"
+                icon="pi pi-users"
+                [disabled]="cat.status === StatusAnimal.REPUBLISHED"
+                pTooltip="Animal em processo de republicação"
+                tooltipPosition="top"
+                (click)="contactPreview.open(cat.contacts)"
+              ></button>
+            </div>
+          </ng-template>
+
+        </p-card>
+
+        <app-contact-view
+          #contactPreview
+          [contacts]="cat.contacts"
+        ></app-contact-view>
+
+      }
+    } @else {
+      <p class="no-cats-message">Nenhum gato encontrado.</p>
+    }
+
+  </div>
+</div>

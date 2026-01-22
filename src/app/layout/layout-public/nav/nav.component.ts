@@ -51,6 +51,9 @@ export class NavComponent implements OnInit {
       {
         label: 'Gatos',
         icon: 'pi pi-list',
+        command: () => {
+          this.redirectTo('/cat');
+        }
       },
     ];
   }

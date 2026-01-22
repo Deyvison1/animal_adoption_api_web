@@ -14,12 +14,12 @@ import { FloatLabel } from 'primeng/floatlabel';
 import { ErroComponent } from '../../../../shared/components/erro/erro.component';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { DogService } from '../../../../core/services/dog.service';
+import { CatService } from '../../../../core/services/cat.service';
 import { ToastrService } from '../../../../core/services/toastr.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OPERATION_MESSAGES } from '../../../../core/constants';
-import { DogDTO } from '../../../../shared/model/dog.dto';
-import { DogCreateDTO } from '../../../../shared/model/dog-create.dto';
+import { CatDTO } from '../../../../shared/model/cat.dto';
+import { CatCreateDTO } from '../../../../shared/model/cat-create.dto';
 import { SelectModule } from 'primeng/select';
 import { AnimalTypeDTO } from '../../../../shared/model/animal-type.dto';
 import { BreedDTO } from '../../../../shared/model/breed.dto';
@@ -28,7 +28,7 @@ import { PageDTO } from '../../../../shared/model/page/page.dto';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { DogUpdateDTO } from '../../../../shared/model/dog-update.dto';
+import { CatUpdateDTO } from '../../../../shared/model/cat-update.dto';
 import { GalleriaModule } from 'primeng/galleria';
 import { FileSelectEvent, FileUploadModule } from 'primeng/fileupload';
 import { BaseImageDTO } from '../../../../shared/model/base/base-image.dto';
@@ -42,7 +42,7 @@ import { StatusAnimal } from '../../../../shared/model/status-animal.enum';
 import { ModalMotivoNotPublishedComponent } from '../../../../shared/components/modal-motivo-not-published/modal-motivo-not-published.component';
 
 @Component({
-  selector: 'app-dog-form',
+  selector: 'app-cat-form',
   standalone: true,
   imports: [
     Card,
@@ -63,12 +63,12 @@ import { ModalMotivoNotPublishedComponent } from '../../../../shared/components/
     AuthRoleDirective,
     ModalMotivoNotPublishedComponent,
   ],
-  templateUrl: './dog-form.component.html',
-  styleUrl: './dog-form.component.scss',
+  templateUrl: './cat-form.component.html',
+  styleUrl: './cat-form.component.scss',
 })
-export class DogFormComponent implements OnInit {
+export class CatFormComponent implements OnInit {
   private readonly fb: FormBuilder = inject(FormBuilder);
-  private readonly dogService: DogService = inject(DogService);
+  private readonly catService: CatService = inject(CatService);
   private readonly animalTypeService: AnimalTypeService =
     inject(AnimalTypeService);
   private readonly breedService: BreedService = inject(BreedService);
@@ -86,12 +86,12 @@ export class DogFormComponent implements OnInit {
   types: AnimalTypeDTO[] = [];
   breeds: BreedDTO[] = [];
   images = signal<BaseImageDTO[]>([]);
-  dogSelected: DogDTO;
+  catSelected: CatDTO;
   activeIndex = signal(0);
   isViewMode: boolean = false;
 
   form: FormGroup;
-  title: string = 'Cadastrar cachorro';
+  title: string = 'Cadastrar gato';
 
   responsiveOptions = [
     { breakpoint: '1300px', numVisible: 4 },
@@ -144,12 +144,12 @@ export class DogFormComponent implements OnInit {
     });
   }
 
-  private add(dto: DogCreateDTO) {
-    this.dogService.add(dto).subscribe({
-      next: (resp: DogDTO) => {
+  private add(dto: CatCreateDTO) {
+    this.catService.add(dto).subscribe({
+      next: (resp: CatDTO) => {
         this.toastrService.showSucess(
           this.operationMessages.SUCCESS,
-          'Tipo adicionado com sucesso.',
+          'Gato adicionado com sucesso.',
         );
         this.navigationToEdit(resp.id);
       },
@@ -160,15 +160,15 @@ export class DogFormComponent implements OnInit {
   }
 
   private navigationToEdit(id: string) {
-    this.router.navigate(['admin/dog', 'form', id]);
+    this.router.navigate(['admin/cat', 'form', id]);
   }
 
-  private update(dto: DogUpdateDTO) {
-    this.dogService.update(this.id, dto).subscribe({
-      next: (resp: DogDTO) => {
+  private update(dto: CatUpdateDTO) {
+    this.catService.update(this.id, dto).subscribe({
+      next: (resp: CatDTO) => {
         this.toastrService.showSucess(
           this.operationMessages.SUCCESS,
-          'Tipo atualizado com sucesso.',
+          'Gato atualizado com sucesso.',
         );
       },
       error: (err) => {
@@ -183,7 +183,7 @@ export class DogFormComponent implements OnInit {
     if (!avaliable && published) {
       this.toastrService.showWarn(
         this.operationMessages.WARNING,
-        'Cachorro não pode estar publicado se não estiver disponível. Caso prossiga, o cachorro será despublicado.',
+        'Gato não pode estar publicado se não estiver disponível. Caso prossiga, o gato será despublicado.',
       );
       this.form.patchValue({ published: false });
     }
@@ -205,20 +205,20 @@ export class DogFormComponent implements OnInit {
     });
   }
 
-  publishDog(): void {
-    this.dogService.isPublish(this.id).subscribe({
+  publishCat(): void {
+    this.catService.isPublish(this.id).subscribe({
       next: () => {
         let status: StatusAnimal = StatusAnimal.NOT_PUBLISHED;
         let msg = '';
         if (this.form.get('status').value === this.statusAnimal.DESPUBLICADO) {
           status = StatusAnimal.REPUBLISHED;
-          msg = 'Cachorro publicado com sucesso';
+          msg = 'Gato publicado com sucesso';
         } else if (
           this.form.get('status').value === this.statusAnimal.NOT_PUBLISHED
         ) {
           status = StatusAnimal.PUBLISHED;
           msg =
-            'Cachorro republicado com sucesso, aguarde 10 minutos para ter sucesso na publicação.';
+            'Gato republicado com sucesso, aguarde 10 minutos para ter sucesso na publicação.';
         }
         this.form.patchValue({ status: status });
         this.form.disable();
@@ -232,12 +232,12 @@ export class DogFormComponent implements OnInit {
     });
   }
 
-  unpublishDog(motivo: string): void {
-    this.dogService.notPublish(this.id, motivo).subscribe({
+  unpublishCat(motivo: string): void {
+    this.catService.notPublish(this.id, motivo).subscribe({
       next: () => {
         this.toastrService.showSucess(
           this.operationMessages.SUCCESS,
-          'Cachorro despublicado com sucesso.',
+          'Gato despublicado com sucesso.',
         );
         this.form.patchValue({ status: this.statusAnimal.DESPUBLICADO });
         this.form.enable();
@@ -259,10 +259,11 @@ export class DogFormComponent implements OnInit {
       if (active) this.form.patchValue({ activeImage: active.filename });
     }
   }
+
   private findById(id: string) {
-    this.dogService.findById(id).subscribe({
-      next: (resp: DogDTO) => {
-        this.dogSelected = resp;
+    this.catService.findById(id).subscribe({
+      next: (resp: CatDTO) => {
+        this.catSelected = resp;
         this.loadImages(resp.imagesComplet);
 
         // Preenche os campos simples
@@ -328,7 +329,7 @@ export class DogFormComponent implements OnInit {
 
   private checkIfUpdate(): void {
     this.id = this.route.snapshot.paramMap.get('id') ?? '';
-    this.title = this.id ? 'Atualizar cachorro' : 'Cadastrar cachorro';
+    this.title = this.id ? 'Atualizar gato' : 'Cadastrar gato';
 
     if (this.id) {
       this.findById(this.id);
@@ -343,7 +344,7 @@ export class DogFormComponent implements OnInit {
     );
 
     if (this.isViewMode) {
-      this.title = 'Visualizar cachorro';
+      this.title = 'Visualizar gato';
       this.form.disable();
     }
   }

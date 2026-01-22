@@ -1,0 +1,243 @@
+<p-card>
+  <h2>{{ title }}</h2>
+
+  <form [formGroup]="form">
+    <div class="formgrid grid">
+      <!-- Nome -->
+      <div class="field col-12 md:col-6 lg:col-4">
+        <p-floatlabel variant="on">
+          <input
+            pInputText
+            id="nome"
+            autocomplete="off"
+            formControlName="name"
+            [ngClass]="{
+              'ng-invalid ng-dirty':
+                form.get('name')?.invalid && form.get('name')?.touched,
+            }"
+            fluid
+            maxlength="50"
+          />
+          <label for="nome">Nome do animal</label>
+        </p-floatlabel>
+        <app-erro [control]="form.get('name')"></app-erro>
+      </div>
+
+      <!-- Idade -->
+      <div class="field col-12 md:col-3 lg:col-2">
+        <p-floatlabel variant="on">
+          <p-inputnumber
+            formControlName="age"
+            inputId="age"
+            class="w-full"
+            fluid
+          />
+          <label for="age">Idade</label>
+        </p-floatlabel>
+        <app-erro [control]="form.get('age')"></app-erro>
+      </div>
+
+      <!-- Raça -->
+      <div class="field col-12 md:col-6 lg:col-4">
+        <p-floatlabel variant="on">
+          <p-select
+            formControlName="breedId"
+            inputId="on_label"
+            [options]="breeds"
+            optionValue="id"
+            optionLabel="name"
+            class="w-full"
+            emptyMessage="Nenhuma raça encontrada"
+          />
+          <label for="on_label">Raça</label>
+        </p-floatlabel>
+        <app-erro [control]="form.get('breedId')"></app-erro>
+      </div>
+
+      <!-- Disponível -->
+      <div class="field col-12 md:col-3 lg:col-2 flex align-items-center">
+        <p-checkbox
+          formControlName="available"
+          binary="true"
+          inputId="ny"
+          (onChange)="updateAvaliable()"
+        ></p-checkbox>
+        <label for="ny" class="ml-2">Disponível?</label>
+        <app-erro [control]="form.get('available')"></app-erro>
+      </div>
+    </div>
+
+    <div class="formgrid grid">
+      @if (id) {
+        <div class="field col-12 md:col-3 lg:col-4">
+          <p-fileupload
+            chooseLabel="Escolher arquivo"
+            uploadLabel="Upload do gato."
+            cancelLabel="Cancelar"
+            pSize="small"
+            mode="basic"
+            chooseIcon="pi pi-upload"
+            accept="image/*"
+            maxFileSize="1000000"
+            chooseLabel="Browse"
+            (onSelect)="onFileSelected($event)"
+            [disabled]="
+              isViewMode ||
+              form.get('status')?.value === statusAnimal.PUBLISHED ||
+              form.get('status')?.value === statusAnimal.REPUBLISHED
+            "
+          />
+        </div>
+      }
+      <div div class="field col-12 md:col-3 lg:col-4">
+        <p-floatlabel variant="on">
+          <textarea
+            pSize="small"
+            rows="3"
+            pTextarea
+            id="over_label"
+            cols="30"
+            formControlName="description"
+            style="resize: none"
+            class="h-full"
+            [ngClass]="{
+              'ng-invalid ng-dirty': form.controls['description'].invalid,
+            }"
+            maxlength="255"
+            minlength="10"
+            fluid
+          ></textarea>
+          <label for="description">Descrição</label>
+        </p-floatlabel>
+        <app-erro [control]="form.get('description')"></app-erro>
+      </div>
+
+      <div class="field col-12 md:col-3 lg:col-2 flex align-items-center">
+        @if (
+          (!isViewMode &&
+            form.get("available")?.value === true &&
+            form.get("status")?.value === statusAnimal.NOT_PUBLISHED) ||
+          form.get("status")?.value === statusAnimal.DESPUBLICADO
+        ) {
+          <p-button
+            [appAuthRole]="rolesAdminPublished"
+            label="Publicar"
+            (onClick)="publishCat()"
+            icon="pi pi-eye"
+            [disabled]="
+              isViewMode ||
+              !id ||
+              form.get('status')?.value == !statusAnimal.NOT_PUBLISHED ||
+              form.get('status')?.value == !statusAnimal.DESPUBLICADO
+            "
+          >
+          </p-button>
+        } @else if (
+          !isViewMode &&
+          form.get("available")?.value === true &&
+          form.get("status")?.value === statusAnimal.PUBLISHED
+        ) {
+          <p-button
+            [appAuthRole]="rolesAdminPublished"
+            label="Despublicar"
+            (onClick)="modalMotivo.open();"
+            icon="pi pi-eye-slash"
+            severity="danger"
+            [disabled]="
+              isViewMode ||
+              !id ||
+              form.get('status')?.value != statusAnimal.PUBLISHED
+            "
+          >
+          </p-button>
+          <app-modal-motivo-not-published #modalMotivo (despublicaAnimal)="unpublishCat($event)"></app-modal-motivo-not-published>
+        }
+      </div>
+    </div>
+
+    <div class="formgrid grid">
+      <app-contact
+        [form]="contactsFormArray"
+        [isViewMode]="isViewMode"
+        [isUpdated]="
+          form.get('status')?.value === statusAnimal.REPUBLISHED ||
+          form.get('status')?.value === statusAnimal.PUBLISHED
+        "
+      ></app-contact>
+    </div>
+
+    @if (!isViewMode) {
+      <!-- Botão -->
+      <div class="flex justify-content-end mt-4">
+        <p-button
+          label="Salvar"
+          (onClick)="save()"
+          [disabled]="
+            form.get('status')?.value === statusAnimal.REPUBLISHED ||
+            form.get('status')?.value === statusAnimal.PUBLISHED
+          "
+        ></p-button>
+      </div>
+    }
+
+    <p-galleria
+      [value]="imagesArray"
+      [showThumbnails]="false"
+      [showIndicators]="true"
+      [showItemNavigatorsOnHover]="true"
+      [(activeIndex)]="activeIndex"
+      [circular]="true"
+      [responsiveOptions]="responsiveOptions"
+      [containerStyle]="{ 'max-width': '640px' }"
+      [responsiveOptions]="responsiveOptions"
+      class="p-3"
+    >
+      <ng-template #item let-item let-i="index">
+        <div
+          class="galery"
+          [ngStyle]="{
+            border: item?.active ? '3px solid #2196f3' : '1px solid #ccc',
+            boxShadow: item?.active ? '0 0 8px rgba(33,150,243,0.5)' : 'none',
+          }"
+        >
+          <img
+            [src]="item?.itemImageSrc"
+            alt="{{ item?.filename }}"
+            class="img"
+          />
+          @if (
+            !isViewMode &&
+            form.get("status")?.value !== statusAnimal.PUBLISHED &&
+            form.get("status")?.value !== statusAnimal.REPUBLISHED
+          ) {
+            <div class="icon-active" (click)="setActiveImage(item)">
+              <i
+                class="pi"
+                [ngClass]="item?.active ? 'pi-check-circle' : 'pi-circle'"
+                style="font-size: 1.2rem; color: #2196f3"
+              ></i>
+            </div>
+
+            <!-- Botão de remover -->
+            <div class="btn-remove">
+              <p-button
+                [appAuthRole]="rolesAdmin"
+                icon="pi pi-times"
+                severity="danger"
+                [rounded]="true"
+                (onClick)="removeImage(item)"
+                [disabled]="item?.active"
+              ></p-button>
+            </div>
+          }
+        </div>
+      </ng-template>
+    </p-galleria>
+  </form>
+  @if (!isViewMode && id && (form.get('status')?.value === statusAnimal.PUBLISHED || form.get('status')?.value === statusAnimal.REPUBLISHED)) {
+    <div class="status-warning">
+      <i class="pi pi-info-circle"></i>
+      <span class="ml-3">{{ statusWarningMessage }}</span>
+    </div>
+  }
+</p-card>

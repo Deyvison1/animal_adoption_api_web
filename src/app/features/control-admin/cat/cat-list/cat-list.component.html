@@ -1,0 +1,139 @@
+<app-dog-filter
+  (searchEvent)="search($event)"
+  (clearEvent)="clear()"
+></app-dog-filter>
+
+<p-card>
+  <h2>Lista de Gatos</h2>
+
+  <p-table
+    [tableStyle]="{ 'min-width': '60rem' }"
+    [lazy]="true"
+    (onLazyLoad)="loadData($event)"
+    paginatorDropdownAppendTo="body"
+    [rows]="pageConfig.size"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="{first} a {last} de {totalRecords} cortes."
+    [rowsPerPageOptions]="[5, 10, 25, 50]"
+    [totalRecords]="totalRecords"
+    [value]="cats"
+    [paginator]="true"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th id="images">Imagem</th>
+        <th id="name">Nome</th>
+        <th id="breed">Raça</th>
+        <th id="age">Idade</th>
+        <th id="createdDate">Data Da Criação</th>
+        <th id="lastModifiedDate">Data da ultima modificação</th>
+        <th id="contacts">Contatos</th>
+        <th id="available">Disponivel | Publicado?</th>
+        <th id="actions">Ações</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-cat>
+      <tr>
+        <td>
+          @if(cat.imagesComplet?.length) {
+          <p-image
+            [src]="getUriImageActive(cat.imagesComplet)"
+            alt="Image"
+            width="90"
+            [preview]="true"
+          />
+          } @else {
+          <span>Sem Imagem</span>
+          }
+        </td>
+        <td>{{ cat.name }}</td>
+        <td>{{ cat.breed.name }}</td>
+        <td>{{ cat.age }}</td>
+        <td>{{ cat.createdDate }}</td>
+        <td>{{ cat.lastModifiedDate }}</td>
+        <td>
+          <p-button
+            [pTooltip]="getContactsName(cat)"
+            icon="pi pi-whatsapp"
+            size="small"
+          ></p-button>
+        </td>
+        <td>
+          @if(cat.available) {
+          <p-button
+            pTooltip="Disponivel"
+            icon="pi pi-check"
+            severity="success"
+            size="small"
+          />
+          } @else {
+          <p-button
+            pTooltip="Indisponivel"
+            icon="pi pi-times"
+            severity="danger"
+            size="small"
+          />
+          } @if(cat.status === statusAnimal.PUBLISHED) {
+          <p-button
+            pTooltip="Publicado"
+            icon="pi pi-eye"
+            severity="success"
+            size="small"
+          />
+          } @else if(cat.status === statusAnimal.NOT_PUBLISHED) {
+          <p-button
+            pTooltip="Não publicado"
+            icon="pi pi-eye-slash"
+            severity="danger"
+            size="small"
+          />
+          } @else if(cat.status === statusAnimal.REPUBLISHED) {
+          <p-button
+            pTooltip="Republicando"
+            icon="pi pi-refresh"
+            severity="info"
+            size="small"
+          />
+          }
+          @else if(cat.status === statusAnimal.DESPUBLICADO) {
+          <p-button
+            [pTooltip]="cat.motivo"
+            icon="pi pi-times"
+            severity="danger"
+            size="small"
+          />
+          }
+        </td>
+        <td>
+          <p-buttongroup>
+            <p-button
+              [appAuthRole]="rolesAdminRead"
+              icon="pi pi-eye"
+              severity="secondary"
+              size="small"
+              (onClick)="navigationToView(cat.id)"
+            />
+            <p-button
+              [appAuthRole]="rolesAdmin"
+              icon="pi pi-pencil"
+              severity="secondary"
+              size="small"
+              (onClick)="navigationToEdit(cat.id)"
+            />
+            @if(cat.status != statusAnimal.PUBLISHED && cat.status != statusAnimal.REPUBLISHED) {
+            <p-button
+              [appAuthRole]="rolesAdmin"
+              icon="pi pi-times"
+              size="small"
+              severity="danger"
+              (onClick)="confirm(cat.id, cat.name)"
+            />
+            }
+          </p-buttongroup>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>
+
+<p-confirmdialog />
