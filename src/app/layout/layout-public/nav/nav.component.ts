@@ -55,6 +55,13 @@ export class NavComponent implements OnInit {
           this.redirectTo('/cat');
         }
       },
+      {
+        label: 'Admin',
+        icon: 'pi pi-server',
+        command: () => {
+          this.redirectTo('/admin');
+        }
+      },
     ];
   }
 
