@@ -15,12 +15,12 @@ import { InputTextModule } from 'primeng/inputtext';
 import { BreedService } from '../../../../core/services/breed.service';
 import { BreedDTO } from '../../../../shared/model/breed.dto';
 import { ActivatedRoute } from '@angular/router';
-import { operationMessages } from '../../../../core/constants/operation-messages.constants';
 import { ToastrService } from '../../../../core/services/toastr.service';
 import { AnimalTypeDTO } from '../../../../shared/model/animal-type.dto';
 import { AnimalTypeService } from '../../../../core/services/animal-type.service';
 import { PageDTO } from '../../../../shared/model/page/page.dto';
 import { SelectModule } from 'primeng/select';
+import { OPERATION_MESSAGES } from '../../../../core/constants';
 
 
 @Component({
@@ -47,7 +47,7 @@ export class BreedFormComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly animalTypeService: AnimalTypeService =
     inject(AnimalTypeService);
-  private readonly operationMessages = operationMessages;
+  private readonly operationMessages = OPERATION_MESSAGES;
 
   form: FormGroup;
   id: string;
@@ -97,7 +97,7 @@ export class BreedFormComponent implements OnInit {
         );
       },
       error: (err) => {
-        this.toastrService.showErro(this.operationMessages.ERRO, 'Erro');
+        this.toastrService.showErro(this.operationMessages.ERROR, 'Erro');
       },
     });
   }
@@ -111,7 +111,7 @@ export class BreedFormComponent implements OnInit {
         );
       },
       error: (err) => {
-        this.toastrService.showErro(this.operationMessages.ERRO, 'Erro');
+        this.toastrService.showErro(this.operationMessages.ERROR, 'Erro');
       },
     });
   }

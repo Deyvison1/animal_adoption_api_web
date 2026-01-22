@@ -7,13 +7,13 @@ import { CarouselModule } from 'primeng/carousel';
 import { ImageModule } from 'primeng/image';
 import { PublicService } from '../../../core/services/public.service';
 import { PageConfigDTO } from '../../../shared/model/page/page-config.dto';
-import { pageConfig } from '../../../core/constants/page-config.constants';
 import { GalleriaModule } from 'primeng/galleria';
 import { ContactViewComponent } from '../contact-view/contact-view.component';
 import { DogFilterComponent } from '../../../shared/components/dog-filter/dog-filter.component';
 import { DogFilterDTO } from '../../../shared/model/dog-filter.dto';
 import { ToastrService } from '../../../core/services/toastr.service';
 import { STATUS_ANIMAL_META, StatusAnimal } from '../../../shared/model/status-animal.enum';
+import { DEFAULT_PAGE_CONFIG } from '../../../core/constants';
 
 @Component({
   selector: 'app-dog-list',
@@ -34,7 +34,7 @@ export class DogListComponent implements OnInit {
   private readonly publicService: PublicService = inject(PublicService);
   private readonly toastrService: ToastrService = inject(ToastrService);
   dogs: DogDTO[] = [];
-  pageConfig: PageConfigDTO<any> = pageConfig;
+  pageConfig: PageConfigDTO<any> = DEFAULT_PAGE_CONFIG;
   loading = true;
   allLoaded = false;
   StatusAnimal = StatusAnimal;

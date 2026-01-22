@@ -10,8 +10,6 @@ import { ToastModule } from 'primeng/toast';
 import { ToastrService } from '../../../../core/services/toastr.service';
 import { Router } from '@angular/router';
 import { DogService } from '../../../../core/services/dog.service';
-import { pageConfig } from '../../../../core/constants/page-config.constants';
-import { operationMessages } from '../../../../core/constants/operation-messages.constants';
 import { DogDTO } from '../../../../shared/model/dog.dto';
 import { getPagePrimeng } from '../../../../shared/utils/page-primeng.utils';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -22,6 +20,7 @@ import { DogFilterComponent } from '../../../../shared/components/dog-filter/dog
 import { DogFilterDTO } from '../../../../shared/model/dog-filter.dto';
 import { AnimalImageDTO } from '../../../../shared/model/animal-image.dto';
 import { StatusAnimal } from '../../../../shared/model/status-animal.enum';
+import { DEFAULT_PAGE_CONFIG, OPERATION_MESSAGES } from '../../../../core/constants';
 
 @Component({
   selector: 'app-dog-list',
@@ -51,8 +50,8 @@ export class DogListComponent {
   readonly rolesAdmin: string[] = ['ADMIN'];
   readonly rolesAdminRead: string[] = ['ADMIN', 'ADMIN_READ'];
 
-  pageConfig = pageConfig;
-  operationMessages = operationMessages;
+  pageConfig = DEFAULT_PAGE_CONFIG;
+  operationMessages = OPERATION_MESSAGES;
   statusAnimal = StatusAnimal;
   dogs: DogDTO[] = [];
   totalRecords = 0;
@@ -67,7 +66,7 @@ export class DogListComponent {
       },
       error: (err: Error) => {
         this.toastrService.showErro(
-          operationMessages.ERRO,
+          OPERATION_MESSAGES.ERROR,
           'Falha ao buscar dados.'
         );
       },
@@ -114,7 +113,7 @@ export class DogListComponent {
   search(filter: DogFilterDTO) {
     this.pageConfig.filters = filter;
     const page = Math.floor(this.pageConfig.page / this.pageConfig.size);
-    this.loadData({ first: page, rows: pageConfig.size });
+    this.loadData({ first: page, rows: this.pageConfig.size });
   }
 
   private delete(id: string) {
@@ -128,7 +127,7 @@ export class DogListComponent {
       },
       error: (err: HttpErrorResponse) => {
         this.toastrService.showErro(
-          this.operationMessages.ERRO,
+          this.operationMessages.ERROR,
           err.error.message
         );
       },

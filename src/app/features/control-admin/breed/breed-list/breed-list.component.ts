@@ -3,8 +3,6 @@ import { Component, inject } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { ToastrService } from '../../../../core/services/toastr.service';
 import { Router } from '@angular/router';
-import { pageConfig } from '../../../../core/constants/page-config.constants';
-import { operationMessages } from '../../../../core/constants/operation-messages.constants';
 import { BreedDTO } from '../../../../shared/model/breed.dto';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { getPagePrimeng } from '../../../../shared/utils/page-primeng.utils';
@@ -17,6 +15,7 @@ import { CardModule } from 'primeng/card';
 import { ButtonGroupModule } from 'primeng/buttongroup';
 import { BreedService } from '../../../../core/services/breed.service';
 import { AuthRoleDirective } from '../../../../shared/directives/auth-role.directive';
+import { DEFAULT_PAGE_CONFIG, OPERATION_MESSAGES } from '../../../../core/constants';
 
 @Component({
   selector: 'app-breed-list',
@@ -43,8 +42,8 @@ export class BreedListComponent {
   private readonly breedService: BreedService = inject(BreedService);
   readonly rolesAdmin: string[] = ['ADMIN'];
 
-  pageConfig = pageConfig;
-  operationMessages = operationMessages;
+  pageConfig = DEFAULT_PAGE_CONFIG;
+  operationMessages = OPERATION_MESSAGES;
   breeds: BreedDTO[] = [];
   totalRecords = 0;
   showTable: boolean = false;
@@ -58,7 +57,7 @@ export class BreedListComponent {
       },
       error: (err: Error) => {
         this.toastrService.showErro(
-          operationMessages.ERRO,
+          this.operationMessages.ERROR,
           'Falha ao buscar dados.'
         );
       },
@@ -98,7 +97,7 @@ export class BreedListComponent {
       },
       error: (err: HttpErrorResponse) => {
         this.toastrService.showErro(
-          this.operationMessages.ERRO,
+          this.operationMessages.ERROR,
           err.error.message
         );
       },
