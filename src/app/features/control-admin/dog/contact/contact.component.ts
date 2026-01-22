@@ -12,7 +12,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { ErroComponent } from '../../../../shared/components/erro/erro.component';
 import { InputText } from 'primeng/inputtext';
 import { SelectChangeEvent, SelectModule } from 'primeng/select';
-import { types } from '../../../../core/constants/contact-type.constants';
+import { CONTACT_TYPES } from '../../../../core/constants';
 import { emailOrPhoneValidator } from '../../../../shared/validators/email-or-phone.validator';
 import { MessageModule } from 'primeng/message';
 import { ContactDTO } from '../../../../shared/model/contact.dto';
@@ -42,7 +42,7 @@ export class ContactComponent implements OnInit {
   private readonly contactFormatService = inject(ContactFormatService);
 
   form = input<FormArray>();
-  types = types;
+  types = CONTACT_TYPES;
   isEmail: boolean = false;
   isViewMode = input.required<boolean>();
   isUpdated = input.required<boolean>();

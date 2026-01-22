@@ -15,7 +15,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { AnimalTypeService } from '../../../../core/services/animal-type.service';
 import { AnimalTypeDTO } from '../../../../shared/model/animal-type.dto';
 import { ToastrService } from '../../../../core/services/toastr.service';
-import { operationMessages } from '../../../../core/constants/operation-messages.constants';
+import { OPERATION_MESSAGES } from '../../../../core/constants';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -41,7 +41,7 @@ export class AnimalTypeFormComponent implements OnInit {
   private readonly toastrService: ToastrService = inject(ToastrService);
   private readonly route = inject(ActivatedRoute);
 
-  private readonly operationMessages = operationMessages;
+  private readonly operationMessages = OPERATION_MESSAGES;
   id: string;
 
   form: FormGroup;
@@ -71,7 +71,7 @@ export class AnimalTypeFormComponent implements OnInit {
         );
       },
       error: (err) => {
-        this.toastrService.showErro(this.operationMessages.ERRO, 'Erro');
+        this.toastrService.showErro(this.operationMessages.ERROR, 'Erro');
       },
     });
   }
@@ -85,7 +85,7 @@ export class AnimalTypeFormComponent implements OnInit {
         );
       },
       error: (err) => {
-        this.toastrService.showErro(this.operationMessages.ERRO, 'Erro');
+        this.toastrService.showErro(this.operationMessages.ERROR, 'Erro');
       },
     });
   }

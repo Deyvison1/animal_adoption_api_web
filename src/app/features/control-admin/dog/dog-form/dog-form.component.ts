@@ -17,7 +17,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DogService } from '../../../../core/services/dog.service';
 import { ToastrService } from '../../../../core/services/toastr.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { operationMessages } from '../../../../core/constants/operation-messages.constants';
+import { OPERATION_MESSAGES } from '../../../../core/constants';
 import { DogDTO } from '../../../../shared/model/dog.dto';
 import { DogCreateDTO } from '../../../../shared/model/dog-create.dto';
 import { SelectModule } from 'primeng/select';
@@ -81,7 +81,7 @@ export class DogFormComponent implements OnInit {
   readonly rolesAdminPublished: string[] = ['ADMIN_PUBLISH'];
   statusAnimal = StatusAnimal;
 
-  private readonly operationMessages = operationMessages;
+  private readonly operationMessages = OPERATION_MESSAGES;
   id: string;
   types: AnimalTypeDTO[] = [];
   breeds: BreedDTO[] = [];
@@ -128,7 +128,7 @@ export class DogFormComponent implements OnInit {
         this.types = resp.content;
       },
       error: (err: HttpErrorResponse) => {
-        this.toastrService.showErro(this.operationMessages.ERRO, 'Erro');
+        this.toastrService.showErro(this.operationMessages.ERROR, 'Erro');
       },
     });
   }
@@ -139,7 +139,7 @@ export class DogFormComponent implements OnInit {
         this.breeds = resp.content;
       },
       error: (err: HttpErrorResponse) => {
-        this.toastrService.showErro(this.operationMessages.ERRO, 'Erro');
+        this.toastrService.showErro(this.operationMessages.ERROR, 'Erro');
       },
     });
   }
@@ -154,7 +154,7 @@ export class DogFormComponent implements OnInit {
         this.navigationToEdit(resp.id);
       },
       error: (err) => {
-        this.toastrService.showErro(this.operationMessages.ERRO, 'Erro');
+        this.toastrService.showErro(this.operationMessages.ERROR, 'Erro');
       },
     });
   }
@@ -172,7 +172,7 @@ export class DogFormComponent implements OnInit {
         );
       },
       error: (err) => {
-        this.toastrService.showErro(this.operationMessages.ERRO, 'Erro');
+        this.toastrService.showErro(this.operationMessages.ERROR, 'Erro');
       },
     });
   }
@@ -182,7 +182,7 @@ export class DogFormComponent implements OnInit {
     const published = this.form.get('published')?.value;
     if (!avaliable && published) {
       this.toastrService.showWarn(
-        this.operationMessages.ATENCION,
+        this.operationMessages.WARNING,
         'Cachorro não pode estar publicado se não estiver disponível. Caso prossiga, o cachorro será despublicado.',
       );
       this.form.patchValue({ published: false });
@@ -226,7 +226,7 @@ export class DogFormComponent implements OnInit {
       },
       error: (err) =>
         this.toastrService.showErro(
-          this.operationMessages.ERRO,
+          this.operationMessages.ERROR,
           err.error?.message,
         ),
     });
@@ -244,7 +244,7 @@ export class DogFormComponent implements OnInit {
       },
       error: (err) =>
         this.toastrService.showWarn(
-          this.operationMessages.ATENCION,
+          this.operationMessages.WARNING,
           err.error?.message,
         ),
     });
@@ -304,7 +304,7 @@ export class DogFormComponent implements OnInit {
         }
       },
       error: (err) => {
-        this.toastrService.showErro(this.operationMessages.ERRO, 'Erro');
+        this.toastrService.showErro(this.operationMessages.ERROR, 'Erro');
       },
     });
   }
@@ -372,7 +372,7 @@ export class DogFormComponent implements OnInit {
         },
         error: (err) =>
           this.toastrService.showErro(
-            this.operationMessages.ERRO,
+            this.operationMessages.ERROR,
             err.error?.message,
           ),
       });
@@ -381,7 +381,7 @@ export class DogFormComponent implements OnInit {
   removeImage(item: AnimalImageDTO): void {
     if (item.active) {
       this.toastrService.showWarn(
-        this.operationMessages.ERRO,
+        this.operationMessages.ERROR,
         'Não é possível excluir a imagem ativa.',
       );
       return;
@@ -409,7 +409,7 @@ export class DogFormComponent implements OnInit {
       },
       error: (err) =>
         this.toastrService.showErro(
-          this.operationMessages.ERRO,
+          this.operationMessages.ERROR,
           err.error?.message,
         ),
     });
@@ -451,12 +451,12 @@ export class DogFormComponent implements OnInit {
       error: (err: HttpErrorResponse) => {
         if (err.status === 409) {
           this.toastrService.showWarn(
-            this.operationMessages.ERRO,
+            this.operationMessages.ERROR,
             err.error?.message,
           );
         } else {
           this.toastrService.showErro(
-            this.operationMessages.ERRO,
+            this.operationMessages.ERROR,
             err.error?.message,
           );
         }

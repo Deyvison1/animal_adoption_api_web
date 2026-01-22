@@ -2,8 +2,7 @@ import { Component, inject } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { ToastrService } from '../../../../core/services/toastr.service';
 import { Router } from '@angular/router';
-import { pageConfig } from '../../../../core/constants/page-config.constants';
-import { operationMessages } from '../../../../core/constants/operation-messages.constants';
+import { DEFAULT_PAGE_CONFIG, OPERATION_MESSAGES } from '../../../../core/constants';
 import { AnimalTypeDTO } from '../../../../shared/model/animal-type.dto';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
@@ -46,8 +45,8 @@ export class AnimalTypeListComponent {
     inject(AnimalTypeService);
   readonly rolesAdmin: string[] = ['ADMIN'];
 
-  pageConfig = pageConfig;
-  operationMessages = operationMessages;
+  pageConfig = DEFAULT_PAGE_CONFIG;
+  operationMessages = OPERATION_MESSAGES;
   animalsType: AnimalTypeDTO[] = [];
   totalRecords = 0;
   showTable: boolean = false;
@@ -61,7 +60,7 @@ export class AnimalTypeListComponent {
       },
       error: (err: Error) => {
         this.toastrService.showErro(
-          operationMessages.ERRO,
+          OPERATION_MESSAGES.ERROR,
           'Falha ao buscar dados.'
         );
       },
@@ -101,7 +100,7 @@ export class AnimalTypeListComponent {
       },
       error: (err: HttpErrorResponse) => {
         this.toastrService.showErro(
-          this.operationMessages.ERRO,
+          this.operationMessages.ERROR,
           err.error.message
         );
       },

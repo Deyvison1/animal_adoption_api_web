@@ -5,7 +5,7 @@ import { QRCodeComponent } from 'angularx-qrcode';
 import { ContactDTO } from '../../../shared/model/contact.dto';
 import { Button } from 'primeng/button';
 import { ToastrService } from '../../../core/services/toastr.service';
-import { operationMessages } from '../../../core/constants/operation-messages.constants';
+import { OPERATION_MESSAGES } from '../../../core/constants';
 
 @Component({
   selector: 'app-contact-view',
@@ -17,7 +17,7 @@ import { operationMessages } from '../../../core/constants/operation-messages.co
 export class ContactViewComponent {
   private readonly toastrService: ToastrService = inject(ToastrService);
   visible = false;
-  messages = operationMessages;
+  messages = OPERATION_MESSAGES;
   contacts = input<ContactDTO[]>(); // recebe lista de contatos
 
   open(contacts: ContactDTO[]) {
