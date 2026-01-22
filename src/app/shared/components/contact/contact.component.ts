@@ -17,7 +17,6 @@ import { emailOrPhoneValidator } from '../../validators/email-or-phone.validator
 import { MessageModule } from 'primeng/message';
 import { ContactDTO } from '../../model/contact.dto';
 import {
-  ContactFormatPipe,
   ContactFormatService,
 } from '../../utils/contact-format.utils';
 
