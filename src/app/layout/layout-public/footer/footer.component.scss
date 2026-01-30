@@ -6,9 +6,31 @@
   justify-content: space-between;
   padding: 1rem;
 
-  .footer-title {
-    font-weight: bold;
-    font-size: 1.1rem;
+  .footer-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    .footer-logo {
+      width: 48px;
+      height: auto;
+      display: block;
+    }
+
+    .footer-info {
+      display: flex;
+      flex-direction: column;
+
+      .footer-title {
+        font-weight: bold;
+        font-size: 1.1rem;
+      }
+
+      .created-by {
+        font-size: 0.85rem;
+        opacity: 0.9;
+      }
+    }
   }
 
   .social-buttons {
