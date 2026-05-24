@@ -17,10 +17,17 @@ export class KeycloakService {
 
     return this.keycloak
       .init({
-        onLoad: 'check-sso', // permite rotas públicas
+        onLoad: 'login-required',
+        pkceMethod: 'S256',
         checkLoginIframe: false,
+        silentCheckSsoRedirectUri: undefined,
       })
-      .then((authenticated) => {});
+      .then(() => {
+        console.log('Keycloak inicializado');
+      })
+      .catch((err) => {
+        console.error('Erro Keycloak init:', err);
+      });
   }
   getRoles(): string[] {
     return this.keycloak.tokenParsed?.realm_access?.roles ?? [];
