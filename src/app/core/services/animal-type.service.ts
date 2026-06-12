@@ -14,25 +14,27 @@ export class AnimalTypeService extends HttpService {
   private readonly url: string = environment.apiUrl.concat('/animal-type');
 
   add(dto: AnimalTypeDTO): Observable<AnimalTypeDTO> {
-    return this.http.post<AnimalTypeDTO>(`${this.url}`, dto);
+    return this.post<AnimalTypeDTO>(this.url, dto);
   }
 
   update(id: string, dto: AnimalTypeDTO): Observable<AnimalTypeDTO> {
-    return this.http.put<AnimalTypeDTO>(`${this.url}/${id}`, dto);
+    return this.put<AnimalTypeDTO>(this.url, id, dto);
   }
 
   delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.url}/${id}`);
+    return this.remove<void>(this.url, id);
   }
 
   findAll(
-    pageConfig: PageConfigDTO<any>
+    pageConfig: PageConfigDTO<any>,
   ): Observable<PageDTO<AnimalTypeDTO[]>> {
-    const params = buildPaginationParams(pageConfig);
-    return this.http.get<PageDTO<AnimalTypeDTO[]>>(`${this.url}`, { params });
+    return this.getFindAll<PageDTO<AnimalTypeDTO[]>>(
+      this.url,
+      buildPaginationParams(pageConfig),
+    );
   }
 
   findById(id: string): Observable<AnimalTypeDTO> {
-    return this.http.get<AnimalTypeDTO>(`${this.url}/${id}`);
+    return this.getFindById<AnimalTypeDTO>(this.url, id);
   }
 }

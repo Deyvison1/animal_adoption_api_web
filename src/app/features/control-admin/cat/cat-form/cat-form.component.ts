@@ -206,7 +206,7 @@ export class CatFormComponent implements OnInit {
   }
 
   publishCat(): void {
-    this.catService.isPublish(this.id).subscribe({
+    this.catService.publish(this.id).subscribe({
       next: () => {
         let status: StatusAnimal = StatusAnimal.NOT_PUBLISHED;
         let msg = '';
@@ -233,7 +233,7 @@ export class CatFormComponent implements OnInit {
   }
 
   unpublishCat(motivo: string): void {
-    this.catService.notPublish(this.id, motivo).subscribe({
+    this.catService.unpublish(this.id, motivo).subscribe({
       next: () => {
         this.toastrService.showSucess(
           this.operationMessages.SUCCESS,
@@ -388,7 +388,7 @@ export class CatFormComponent implements OnInit {
       return;
     }
 
-    this.animalImageService.remove(item.id, this.id).subscribe({
+    this.animalImageService.delete(item.id, this.id).subscribe({
       next: () => {
         this.images.update((imgs) => {
           const filtered = imgs.filter((img) => img?.id !== item?.id);

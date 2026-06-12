@@ -206,7 +206,7 @@ export class DogFormComponent implements OnInit {
   }
 
   publishDog(): void {
-    this.dogService.isPublish(this.id).subscribe({
+    this.dogService.publish(this.id).subscribe({
       next: () => {
         let status: StatusAnimal = StatusAnimal.NOT_PUBLISHED;
         let msg = '';
@@ -233,7 +233,7 @@ export class DogFormComponent implements OnInit {
   }
 
   unpublishDog(motivo: string): void {
-    this.dogService.notPublish(this.id, motivo).subscribe({
+    this.dogService.unpublish(this.id, motivo).subscribe({
       next: () => {
         this.toastrService.showSucess(
           this.operationMessages.SUCCESS,
@@ -387,7 +387,7 @@ export class DogFormComponent implements OnInit {
       return;
     }
 
-    this.animalImageService.remove(item.id, this.id).subscribe({
+    this.animalImageService.delete(item.id, this.id).subscribe({
       next: () => {
         this.images.update((imgs) => {
           const filtered = imgs.filter((img) => img?.id !== item?.id);

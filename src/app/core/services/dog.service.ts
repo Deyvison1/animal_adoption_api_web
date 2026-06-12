@@ -18,32 +18,33 @@ export class DogService extends HttpService {
   findAll(
     pageConfig: PageConfigDTO<DogFilterDTO>,
   ): Observable<PageDTO<DogDTO[]>> {
-    const params = buildPaginationParams(pageConfig);
-    return this.http.get<PageDTO<DogDTO[]>>(`${this.url}`, { params });
+    return this.getFindAll<PageDTO<DogDTO[]>>(
+      this.url,
+      buildPaginationParams(pageConfig),
+    );
   }
 
   add(dto: DogCreateDTO): Observable<DogDTO> {
-    return this.http.post<DogDTO>(`${this.url}`, dto);
+    return this.post<DogDTO>(this.url, dto);
   }
 
   update(id: string, dto: DogCreateDTO): Observable<DogDTO> {
-    return this.http.put<DogDTO>(`${this.url}/${id}`, dto);
+    return this.put<DogDTO>(this.url, id, dto);
   }
 
   findById(id: string): Observable<DogDTO> {
-    return this.http.get<DogDTO>(`${this.url}/${id}`);
+    return this.getFindById<DogDTO>(this.url, id);
   }
 
   delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.url}/${id}`);
+    return this.remove<void>(this.url, id);
   }
 
-  isPublish(id: string): Observable<void> {
-    return this.http.get<void>(`${this.url}/is-publish/${id}`);
+  publish(id: string): Observable<void> {
+    return this.patch<void>(`${this.url}/${id}/publish`);
   }
 
-  notPublish(id: string, motivo: string): Observable<void> {
-    const params = { motivo };
-    return this.http.get<void>(`${this.url}/not-publish/${id}`, { params });
+  unpublish(id: string, motivo: string): Observable<void> {
+    return this.patch<void>(`${this.url}/${id}/unpublish`, { motivo });
   }
 }

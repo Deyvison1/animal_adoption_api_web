@@ -25,7 +25,7 @@ export class AnimalImageService extends HttpService {
     return this.http.patch<void>(`${this.url}/${id}/activate?idIsDisabled=${ids}`, {});
   }
 
-  remove(id: string, dogId: string): Observable<void> {
+  delete(id: string, dogId: string): Observable<void> {
     return this.http.delete<void>(`${this.url}/${id}/${dogId}`);
   }
 }
