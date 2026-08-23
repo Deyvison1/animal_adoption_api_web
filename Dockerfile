@@ -10,13 +10,17 @@ COPY . .
 
 RUN npm run build -- --configuration production --no-prerender
 
-
 # Etapa 2: Nginx
 FROM nginx:alpine
 
+# Angular
 COPY --from=build /app/dist/animal-adoption-web/browser /usr/share/nginx/html
 
+# Configuração do Nginx
 COPY nginx.conf /etc/nginx/nginx.conf
+
+# Certificados locais
+COPY certs/ /etc/nginx/certs/
 
 EXPOSE 80 443
 
