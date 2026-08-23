@@ -10,8 +10,6 @@ services:
       my-infra-docker:
         aliases:
           - image_api
-    volumes:
-      - ./certs:/etc/nginx/certs:ro
 networks:
   my-infra-docker:
     external: true
