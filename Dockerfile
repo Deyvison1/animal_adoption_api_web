@@ -1,21 +1,27 @@
 # Etapa 1: Build Angular
 FROM node:20-alpine AS build
+
 WORKDIR /app
 
 COPY package*.json ./
 RUN npm install
 
 COPY . .
+
 RUN npm run build -- --configuration production --no-prerender
 
-# Etapa 2: Servir com Nginx + SSL
+
+# Etapa 2: Nginx
 FROM nginx:alpine
 
-# Copia arquivos do Angular
+# Angular
 COPY --from=build /app/dist/animal-adoption-web/browser /usr/share/nginx/html
 
-# Copia configuração Nginx
+# Configuração nginx
 COPY nginx.conf /etc/nginx/nginx.conf
+
+# Certificados locais
+COPY certs /etc/nginx/certs
 
 EXPOSE 80 443
 
