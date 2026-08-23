@@ -8,5 +8,5 @@ export const environment = {
     clientId: 'ANIMAL_ADOPTION_CLIENT_PUBLIC',
     urlAccount:
       'http://keycloak.animal-adoption.com.br:8080/realms/MY_KEYCLOAK/account/',
-  },
+  },  
 };
