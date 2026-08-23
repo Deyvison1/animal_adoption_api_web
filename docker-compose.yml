@@ -12,7 +12,7 @@ services:
         aliases:
           - image_api
     volumes:
-      - /etc/letsencrypt:/etc/letsencrypt:ro  # monta certificados do host
+      - ./certs:/etc/nginx/certs:ro  # monta certificados do host
 
 networks:
   my-infra-docker:
