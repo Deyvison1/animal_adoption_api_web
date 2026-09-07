@@ -2,19 +2,10 @@
 
 set -e
 
-PROJECT_DIR="$HOME/containers/front/animal_adoption_api_web"
-
-cd "$PROJECT_DIR"
-
-echo "================================="
-echo "🚀 Deploy AnimalAdoptionWeb"
-echo "================================="
+echo "🐳 Rebuild e restart do frontend..."
 
 docker compose up -d --build
 
-echo "📦 Container:"
-docker ps --filter "name=adoption-animal-app"
-
-echo "================================="
 echo "✅ Deploy concluído!"
-echo "================================="
+
+docker ps --filter "name=adoption-animal-app"
