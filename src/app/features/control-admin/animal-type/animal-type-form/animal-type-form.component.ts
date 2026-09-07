@@ -40,7 +40,7 @@ export class AnimalTypeFormComponent implements OnInit {
     inject(AnimalTypeService);
   private readonly toastrService: ToastrService = inject(ToastrService);
   private readonly route = inject(ActivatedRoute);
-
+  private readonly router = inject(Router);
   private readonly operationMessages = OPERATION_MESSAGES;
   id: string;
 
@@ -69,11 +69,16 @@ export class AnimalTypeFormComponent implements OnInit {
           this.operationMessages.SUCCESS,
           'Tipo adicionado com sucesso.'
         );
+        this.redirectToGrid();
       },
       error: (err) => {
         this.toastrService.showErro(this.operationMessages.ERROR, 'Erro');
       },
     });
+  }
+
+  private redirectToGrid() {
+    this.router.navigate(['admin/animal-type', 'list', ]);
   }
 
   private update(dto: AnimalTypeDTO) {
@@ -83,6 +88,7 @@ export class AnimalTypeFormComponent implements OnInit {
           this.operationMessages.SUCCESS,
           'Tipo atualizado com sucesso.'
         );
+        this.redirectToGrid();
       },
       error: (err) => {
         this.toastrService.showErro(this.operationMessages.ERROR, 'Erro');

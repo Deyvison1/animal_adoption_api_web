@@ -4,9 +4,9 @@ import { MenuItem } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { Menubar } from 'primeng/menubar';
 import { InputTextModule } from 'primeng/inputtext';
-import { Button, ButtonModule } from "primeng/button";
-import { Router } from "@angular/router";
-import { Menu, MenuModule } from "primeng/menu";
+import { Button, ButtonModule } from 'primeng/button';
+import { Router } from '@angular/router';
+import { Menu, MenuModule } from 'primeng/menu';
 import { KeycloakService } from '../../../core/services/keycloak.service';
 import { environment } from '../../../../environments/environment';
 @Component({
@@ -19,7 +19,7 @@ import { environment } from '../../../../environments/environment';
     CommonModule,
     Button,
     MenuModule,
-],
+  ],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.scss',
 })
@@ -33,36 +33,43 @@ export class NavComponent implements OnInit {
 
   ngOnInit() {
     this.initProfileMenu();
-    this.items = [
+    this.init();
+  }
+
+  init() {
+     this.items = [
       {
         label: 'Home',
         icon: 'pi pi-home',
-         command: () => {
+        command: () => {
           this.redirectTo('/home');
-        }
+        },
       },
       {
         label: 'Cachorros',
         icon: 'pi pi-list',
         command: () => {
-          this.redirectTo('/dog');
-        }
+          this.redirectTo('/public/dog');
+        },
       },
       {
         label: 'Gatos',
         icon: 'pi pi-list',
         command: () => {
-          this.redirectTo('/cat');
-        }
-      },
-      {
+          this.redirectTo('/public/cat');
+        },
+      }
+    ];
+
+    if (this.keycloakService.isLoggedIn()) {
+      this.items.push({
         label: 'Admin',
         icon: 'pi pi-server',
         command: () => {
           this.redirectTo('/admin');
-        }
-      },
-    ];
+        },
+      });
+    }
   }
 
   redirectTo(path: string) {

@@ -17,7 +17,7 @@ export class KeycloakService {
 
     return this.keycloak
       .init({
-        onLoad: 'login-required',
+        onLoad: 'check-sso',
         pkceMethod: 'S256',
         checkLoginIframe: false,
         silentCheckSsoRedirectUri: undefined,

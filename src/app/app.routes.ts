@@ -4,30 +4,30 @@ import { LayoutPublicComponent } from './layout/layout-public/layout-public.comp
 import { LayoutAdminComponent } from './layout/layout-admin/layout-admin.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: '', redirectTo: 'public/home', pathMatch: 'full' },
   {
-    path: '',
+    path: 'public',
     component: LayoutPublicComponent,
     children: [
       {
         path: 'home',
         loadComponent: () =>
           import('./features/public/home/home.component').then(
-            (m) => m.HomeComponent
+            (m) => m.HomeComponent,
           ),
       },
       {
         path: 'dog',
         loadComponent: () =>
           import('./features/public/dog-list/dog-list.component').then(
-            (m) => m.DogListComponent
+            (m) => m.DogListComponent,
           ),
       },
       {
         path: 'cat',
         loadComponent: () =>
           import('./features/public/cat-list/cat-list.component').then(
-            (m) => m.CatListComponent
+            (m) => m.CatListComponent,
           ),
       },
     ],
@@ -41,7 +41,7 @@ export const routes: Routes = [
         path: 'forbidden',
         loadComponent: () =>
           import('./shared/components/forbidden/forbidden.component').then(
-            (r) => r.ForbiddenComponent
+            (r) => r.ForbiddenComponent,
           ),
         canActivate: [AuthGuard],
       },
@@ -49,43 +49,43 @@ export const routes: Routes = [
         path: 'dog',
         loadComponent: () =>
           import('./features/control-admin/dog/dog.component').then(
-            (r) => r.DogComponent
+            (r) => r.DogComponent,
           ),
         canActivate: [AuthGuard],
         children: [
           {
             path: 'form',
             loadComponent: () =>
-              import(
-                './features/control-admin/dog/dog-form/dog-form.component'
-              ).then((r) => r.DogFormComponent),
+              import('./features/control-admin/dog/dog-form/dog-form.component').then(
+                (r) => r.DogFormComponent,
+              ),
             canActivate: [AuthGuard],
             data: { roles: ['ADMIN'] },
           },
           {
             path: 'form/:id',
             loadComponent: () =>
-              import(
-                './features/control-admin/dog/dog-form/dog-form.component'
-              ).then((r) => r.DogFormComponent),
+              import('./features/control-admin/dog/dog-form/dog-form.component').then(
+                (r) => r.DogFormComponent,
+              ),
             canActivate: [AuthGuard],
             data: { roles: ['ADMIN'] },
           },
           {
             path: 'form/:id/view',
             loadComponent: () =>
-              import(
-                './features/control-admin/dog/dog-form/dog-form.component'
-              ).then((r) => r.DogFormComponent),
+              import('./features/control-admin/dog/dog-form/dog-form.component').then(
+                (r) => r.DogFormComponent,
+              ),
             canActivate: [AuthGuard],
             data: { roles: ['ADMIN', 'ADMIN_READ'] },
           },
           {
             path: 'list',
             loadComponent: () =>
-              import(
-                './features/control-admin/dog/dog-list/dog-list.component'
-              ).then((r) => r.DogListComponent),
+              import('./features/control-admin/dog/dog-list/dog-list.component').then(
+                (r) => r.DogListComponent,
+              ),
             canActivate: [AuthGuard],
             data: { roles: ['ADMIN', 'ADMIN_READ'] },
           },
@@ -96,43 +96,43 @@ export const routes: Routes = [
         path: 'cat',
         loadComponent: () =>
           import('./features/control-admin/cat/cat.component').then(
-            (r) => r.CatComponent
+            (r) => r.CatComponent,
           ),
         canActivate: [AuthGuard],
         children: [
           {
             path: 'form',
             loadComponent: () =>
-              import(
-                './features/control-admin/cat/cat-form/cat-form.component'
-              ).then((r) => r.CatFormComponent),
+              import('./features/control-admin/cat/cat-form/cat-form.component').then(
+                (r) => r.CatFormComponent,
+              ),
             canActivate: [AuthGuard],
             data: { roles: ['ADMIN'] },
           },
           {
             path: 'form/:id',
             loadComponent: () =>
-              import(
-                './features/control-admin/cat/cat-form/cat-form.component'
-              ).then((r) => r.CatFormComponent),
+              import('./features/control-admin/cat/cat-form/cat-form.component').then(
+                (r) => r.CatFormComponent,
+              ),
             canActivate: [AuthGuard],
             data: { roles: ['ADMIN'] },
           },
           {
             path: 'form/:id/view',
             loadComponent: () =>
-              import(
-                './features/control-admin/cat/cat-form/cat-form.component'
-              ).then((r) => r.CatFormComponent),
+              import('./features/control-admin/cat/cat-form/cat-form.component').then(
+                (r) => r.CatFormComponent,
+              ),
             canActivate: [AuthGuard],
             data: { roles: ['ADMIN', 'ADMIN_READ'] },
           },
           {
             path: 'list',
             loadComponent: () =>
-              import(
-                './features/control-admin/cat/cat-list/cat-list.component'
-              ).then((r) => r.CatListComponent),
+              import('./features/control-admin/cat/cat-list/cat-list.component').then(
+                (r) => r.CatListComponent,
+              ),
             canActivate: [AuthGuard],
             data: { roles: ['ADMIN', 'ADMIN_READ'] },
           },
@@ -142,44 +142,44 @@ export const routes: Routes = [
       {
         path: 'animal-type',
         loadComponent: () =>
-          import(
-            './features/control-admin/animal-type/animal-type.component'
-          ).then((r) => r.AnimalTypeComponent),
+          import('./features/control-admin/animal-type/animal-type.component').then(
+            (r) => r.AnimalTypeComponent,
+          ),
         canActivate: [AuthGuard],
         children: [
           {
             path: 'form',
             loadComponent: () =>
-              import(
-                './features/control-admin/animal-type/animal-type-form/animal-type-form.component'
-              ).then((r) => r.AnimalTypeFormComponent),
+              import('./features/control-admin/animal-type/animal-type-form/animal-type-form.component').then(
+                (r) => r.AnimalTypeFormComponent,
+              ),
             canActivate: [AuthGuard],
             data: { roles: ['ADMIN'] },
           },
           {
             path: 'form/:id',
             loadComponent: () =>
-              import(
-                './features/control-admin/animal-type/animal-type-form/animal-type-form.component'
-              ).then((r) => r.AnimalTypeFormComponent),
+              import('./features/control-admin/animal-type/animal-type-form/animal-type-form.component').then(
+                (r) => r.AnimalTypeFormComponent,
+              ),
             canActivate: [AuthGuard],
             data: { roles: ['ADMIN'] },
           },
           {
             path: 'form/:id/view',
             loadComponent: () =>
-              import(
-                './features/control-admin/animal-type/animal-type-form/animal-type-form.component'
-              ).then((r) => r.AnimalTypeFormComponent),
+              import('./features/control-admin/animal-type/animal-type-form/animal-type-form.component').then(
+                (r) => r.AnimalTypeFormComponent,
+              ),
             canActivate: [AuthGuard],
             data: { roles: ['ADMIN', 'ADMIN_READ'] },
           },
           {
             path: 'list',
             loadComponent: () =>
-              import(
-                './features/control-admin/animal-type/animal-type-list/animal-type-list.component'
-              ).then((r) => r.AnimalTypeListComponent),
+              import('./features/control-admin/animal-type/animal-type-list/animal-type-list.component').then(
+                (r) => r.AnimalTypeListComponent,
+              ),
             canActivate: [AuthGuard],
             data: { roles: ['ADMIN', 'ADMIN_READ'] },
           },
@@ -189,43 +189,43 @@ export const routes: Routes = [
         path: 'breed',
         loadComponent: () =>
           import('./features/control-admin/breed/breed.component').then(
-            (r) => r.BreedComponent
+            (r) => r.BreedComponent,
           ),
         canActivate: [AuthGuard],
         children: [
           {
             path: 'form',
             loadComponent: () =>
-              import(
-                './features/control-admin/breed/breed-form/breed-form.component'
-              ).then((r) => r.BreedFormComponent),
+              import('./features/control-admin/breed/breed-form/breed-form.component').then(
+                (r) => r.BreedFormComponent,
+              ),
             canActivate: [AuthGuard],
             data: { roles: ['ADMIN'] },
           },
           {
             path: 'form/:id',
             loadComponent: () =>
-              import(
-                './features/control-admin/breed/breed-form/breed-form.component'
-              ).then((r) => r.BreedFormComponent),
+              import('./features/control-admin/breed/breed-form/breed-form.component').then(
+                (r) => r.BreedFormComponent,
+              ),
             canActivate: [AuthGuard],
             data: { roles: ['ADMIN'] },
           },
           {
             path: 'form/:id/view',
             loadComponent: () =>
-              import(
-                './features/control-admin/breed/breed-form/breed-form.component'
-              ).then((r) => r.BreedFormComponent),
+              import('./features/control-admin/breed/breed-form/breed-form.component').then(
+                (r) => r.BreedFormComponent,
+              ),
             canActivate: [AuthGuard],
             data: { roles: ['ADMIN', 'ADMIN_READ'] },
           },
           {
             path: 'list',
             loadComponent: () =>
-              import(
-                './features/control-admin/breed/breed-list/breed-list.component'
-              ).then((r) => r.BreedListComponent),
+              import('./features/control-admin/breed/breed-list/breed-list.component').then(
+                (r) => r.BreedListComponent,
+              ),
             canActivate: [AuthGuard],
             data: { roles: ['ADMIN', 'ADMIN_READ'] },
           },

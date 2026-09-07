@@ -14,7 +14,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { BreedService } from '../../../../core/services/breed.service';
 import { BreedDTO } from '../../../../shared/model/breed.dto';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from '../../../../core/services/toastr.service';
 import { AnimalTypeDTO } from '../../../../shared/model/animal-type.dto';
 import { AnimalTypeService } from '../../../../core/services/animal-type.service';
@@ -45,6 +45,7 @@ export class BreedFormComponent implements OnInit {
   private readonly breedService: BreedService = inject(BreedService);
   private readonly toastrService: ToastrService = inject(ToastrService);
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly animalTypeService: AnimalTypeService =
     inject(AnimalTypeService);
   private readonly operationMessages = OPERATION_MESSAGES;
@@ -88,6 +89,10 @@ export class BreedFormComponent implements OnInit {
     }
   }
 
+   private redirectToGrid() {
+    this.router.navigate(['admin/breed', 'list', ]);
+  }
+
   private add(dto: BreedDTO) {
     this.breedService.add(dto).subscribe({
       next: (resp: BreedDTO) => {
@@ -95,6 +100,7 @@ export class BreedFormComponent implements OnInit {
           this.operationMessages.SUCCESS,
           'Tipo adicionado com sucesso.'
         );
+        this.redirectToGrid();
       },
       error: (err) => {
         this.toastrService.showErro(this.operationMessages.ERROR, 'Erro');
@@ -109,6 +115,7 @@ export class BreedFormComponent implements OnInit {
           this.operationMessages.SUCCESS,
           'Tipo atualizado com sucesso.'
         );
+        this.redirectToGrid();
       },
       error: (err) => {
         this.toastrService.showErro(this.operationMessages.ERROR, 'Erro');
