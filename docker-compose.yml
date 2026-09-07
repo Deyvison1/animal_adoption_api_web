@@ -5,18 +5,14 @@ services:
     restart: unless-stopped
 
     networks:
-      my-infra-docker:
-        aliases:
-          - image_api
+      - my-infra-docker
 
     labels:
       - "traefik.enable=true"
-
       - "traefik.http.routers.app-animal-adoption.rule=Host(`app.animal-adoption.com.br`)"
       - "traefik.http.routers.app-animal-adoption.entrypoints=websecure"
       - "traefik.http.routers.app-animal-adoption.tls=true"
       - "traefik.http.routers.app-animal-adoption.tls.certresolver=letsencrypt"
-
       - "traefik.http.services.app-animal-adoption.loadbalancer.server.port=80"
 
 networks:

@@ -1,4 +1,4 @@
-# Etapa 1
+# Etapa 1 - Build
 FROM node:20-alpine AS build
 
 WORKDIR /app
@@ -11,13 +11,15 @@ COPY . .
 RUN npm run build -- --configuration production --no-prerender
 
 
-# Etapa 2
-FROM nginx:alpine
+# Etapa 2 - Servir Angular
+FROM node:20-alpine
 
-COPY --from=build /app/dist/animal-adoption-web/browser /usr/share/nginx/html
+WORKDIR /app
 
-COPY nginx.conf /etc/nginx/nginx.conf
+RUN npm install -g serve
 
-EXPOSE 80 443
+COPY --from=build /app/dist/animal-adoption-web/browser ./dist
 
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 80
+
+CMD ["serve", "-s", "dist", "-l", "80"]
