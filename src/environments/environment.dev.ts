@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://api.animal-adoption.com.br/api',
-  apiUrlPublic: 'http://api.animal-adoption.com.br/public',
+  apiUrl: 'https://api.animal-adoption.com.br/api',
+  apiUrlPublic: 'https://api.animal-adoption.com.br/public',
   keycloakConfig: {
     url: 'https://auth.animal-adoption.com.br:8080',
     realm: 'MY_KEYCLOAK',
