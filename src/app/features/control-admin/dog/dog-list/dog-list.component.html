@@ -26,7 +26,7 @@
         <th id="breed">Raça</th>
         <th id="age">Idade</th>
         <th id="createdDate">Data Da Criação</th>
-        <th id="lastModifiedDate">Data da ultima modificação</th>
+        <th id="updateDate">Data da ultima modificação</th>
         <th id="contacts">Contatos</th>
         <th id="available">Disponivel | Publicado?</th>
         <th id="actions">Ações</th>
@@ -49,8 +49,8 @@
         <td>{{ dog.name }}</td>
         <td>{{ dog.breed.name }}</td>
         <td>{{ dog.age }}</td>
-        <td>{{ dog.createdDate }}</td>
-        <td>{{ dog.lastModifiedDate }}</td>
+        <td>{{ dog.creationDate | date:'dd/MM/yyyy HH:mm' }}</td>
+        <td>{{ dog.updateDate | date:'dd/MM/yyyy HH:mm' }}</td>
         <td>
           <p-button
             [pTooltip]="getContactsName(dog)"

@@ -19,8 +19,8 @@
     <ng-template pTemplate="header">
       <tr>
         <th id="images">Nome</th>
-        <th id="createdDate">Data Da Criação</th>
-        <th id="lastModifiedDate">Data da ultima modificação</th>
+        <th id="creationDate">Data Da Criação</th>
+        <th id="updateDate">Data da ultima modificação</th>
         <th id="nationality">Nacionalidade</th>
         <th id="actions">Ações</th>
       </tr>
@@ -28,8 +28,8 @@
     <ng-template pTemplate="body" let-breed>
       <tr>
         <td>{{ breed.name }}</td>
-        <td>{{ breed.createdDate }}</td>
-        <td>{{ breed.lastModifiedDate }}</td>
+        <td>{{ breed.creationDate | date:'dd/MM/yyyy HH:mm' }}</td>
+        <td>{{ breed.updateDate | date:'dd/MM/yyyy HH:mm' }}</td>
         <td>{{ breed.nationality }}</td>
         <td>
           <p-buttongroup>

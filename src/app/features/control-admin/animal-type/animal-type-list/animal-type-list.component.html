@@ -19,16 +19,16 @@
     <ng-template pTemplate="header">
       <tr>
         <th id="images">Nome</th>
-        <th id="createdDate">Data Da Criação</th>
-        <th id="lastModifiedDate">Data da ultima modificação</th>
+        <th id="creationDate">Data Da Criação</th>
+        <th id="updateDate">Data da ultima modificação</th>
         <th id="actions">Ações</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-animalType>
       <tr>
         <td>{{ animalType.name }}</td>
-        <td>{{ animalType.createdDate }}</td>
-        <td>{{ animalType.lastModifiedDate }}</td>
+        <td>{{ animalType.creationDate | date:'dd/MM/yyyy HH:mm' }}</td>
+        <td>{{ animalType.updateDate | date:'dd/MM/yyyy HH:mm' }}</td>
         <td>
           <p-buttongroup>
             <p-button

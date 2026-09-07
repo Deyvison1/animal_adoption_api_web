@@ -25,8 +25,8 @@
         <th id="name">Nome</th>
         <th id="breed">Raça</th>
         <th id="age">Idade</th>
-        <th id="createdDate">Data Da Criação</th>
-        <th id="lastModifiedDate">Data da ultima modificação</th>
+        <th id="creationDate">Data Da Criação</th>
+        <th id="updateDate">Data da ultima modificação</th>
         <th id="contacts">Contatos</th>
         <th id="available">Disponivel | Publicado?</th>
         <th id="actions">Ações</th>
@@ -49,8 +49,8 @@
         <td>{{ cat.name }}</td>
         <td>{{ cat.breed.name }}</td>
         <td>{{ cat.age }}</td>
-        <td>{{ cat.createdDate }}</td>
-        <td>{{ cat.lastModifiedDate }}</td>
+        <td>{{ cat.creationDate | date:'dd/MM/yyyy HH:mm' }}</td>
+        <td>{{ cat.updateDate | date:'dd/MM/yyyy HH:mm' }}</td>
         <td>
           <p-button
             [pTooltip]="getContactsName(cat)"
