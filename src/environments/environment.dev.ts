@@ -1,12 +1,12 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://192.168.18.7:8083/api',
-  apiUrlPublic: 'http://192.168.18.7:8083/public',
+  apiUrl: 'http://api.animal-adoption.com.br/api',
+  apiUrlPublic: 'http://api.animal-adoption.com.br/public',
   keycloakConfig: {
-    url: 'http://keycloak.animal-adoption.com.br:8080',
+    url: 'https://auth.animal-adoption.com.br:8080',
     realm: 'MY_KEYCLOAK',
     clientId: 'ANIMAL_ADOPTION_CLIENT_PUBLIC',
     urlAccount:
-      'http://keycloak.animal-adoption.com.br:8080/realms/MY_KEYCLOAK/account/',
+      'https://auth.animal-adoption.com.br:8080/realms/MY_KEYCLOAK/account/',
   },
 };
