@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 
@@ -12,5 +12,10 @@ import { CardModule } from 'primeng/card';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
+  private readonly router = inject(Router);
   currentYear = new Date().getFullYear();
+
+  navigationToDog() {
+    this.router.navigate(['public/dog']);
+  }
 }
